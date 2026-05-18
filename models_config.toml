@@ -3,15 +3,30 @@ ollama_url = "http://localhost:11434"
 default_timeout = 300
 
 [[models]]
-name = "gemma-3-4b-it-abliterated-GGUF:Q4_K_M"
+name = "sushi-coder-custom:latest"
 role = "Coder"
-description = "Main model for code generation and small fixes."
+description = "Main model for code generation and logic implementation."
 priority = 1
 system_prompt = "You are an expert software engineer. Provide concise and accurate code."
 
+[models.options]
+temperature = 0.2
+top_p = 0.9
+top_k = 40
+repeat_penalty = 1.2
+num_ctx = 8192
+
 [[models]]
-name = "jaahas/qwen3.5-uncensored:4b"
-role = "Assistant"
-description = "General purpose assistant for chat and advice."
+name = "carstenuhlig/omnicoder-9b:latest"
+role = "Reviewer"
+description = "Specialized in code review and research."
 priority = 2
-system_prompt = "You are a helpful and friendly assistant."
+system_prompt = "You are a senior code reviewer. Provide critical and constructive feedback."
+
+[models.options]
+temperature = 0.5
+num_ctx = 16384
+
+[models.runtime]
+num_thread = 6
+low_vram = true

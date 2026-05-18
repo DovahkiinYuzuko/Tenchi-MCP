@@ -53,8 +53,13 @@ impl ServerHandler for TenchiHandler {
     ) -> std::result::Result<CallToolResult, CallToolError> {
         match params.name.as_str() {
             "list_local_models" => {
-                let models_info = self.config.models.iter().map(|m| {
-                    format!("Name: {}, Role: {}, Description: {}", m.name, m.role, m.description)
+                let mut models = self.config.models.clone();
+                // Sort by priority (higher priority first or lower value first? usually lower value = higher priority)
+                // Let's assume lower value = higher priority as per usual conventions
+                models.sort_by_key(|m| m.priority);
+
+                let models_info = models.iter().map(|m| {
+                    format!("Name: {}, Role: {}, Priority: {}, Description: {}", m.name, m.role, m.priority, m.description)
                 }).collect::<Vec<_>>().join("\n");
                 
                 Ok(CallToolResult::text_content(vec![models_info.into()]))
@@ -68,7 +73,13 @@ impl ServerHandler for TenchiHandler {
                     .find(|m| m.name == args.model_name)
                     .ok_or_else(|| CallToolError::unknown_tool(format!("Model {} not found in config", args.model_name)))?;
 
-                match self.client.generate(&model_cfg.name, &model_cfg.system_prompt, &args.prompt, model_cfg.options.clone()).await {
+                match self.client.generate(
+                    &model_cfg.name, 
+                    &model_cfg.system_prompt, 
+                    &args.prompt, 
+                    model_cfg.options.clone(),
+                    model_cfg.runtime.clone()
+                ).await {
                     Ok(response) => Ok(CallToolResult::text_content(vec![response.into()])),
                     Err(e) => Ok(CallToolResult::text_content(vec![format!("Error: {}", e).into()])),
                 }
@@ -85,7 +96,7 @@ async fn main() -> SdkResult<()> {
         std::process::exit(1);
     }).unwrap();
 
-    let client = OllamaClient::new(config.global.ollama_url.clone());
+    let client = OllamaClient::new(config.global.ollama_url.clone(), config.global.default_timeout);
 
     let server_details = InitializeResult {
         server_info: Implementation {

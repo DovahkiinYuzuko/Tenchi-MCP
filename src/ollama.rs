@@ -1,6 +1,7 @@
 use reqwest::Client;
 use serde::{Serialize, Deserialize};
-use std::collections::HashMap;
+use std::time::Duration;
+use crate::config::{ModelOptions, ModelRuntime};
 
 #[derive(Serialize)]
 struct GenerateRequest {
@@ -8,7 +9,7 @@ struct GenerateRequest {
     prompt: String,
     system: String,
     stream: bool,
-    options: Option<HashMap<String, serde_json::Value>>,
+    options: serde_json::Value,
 }
 
 #[derive(Deserialize)]
@@ -22,9 +23,12 @@ pub struct OllamaClient {
 }
 
 impl OllamaClient {
-    pub fn new(base_url: String) -> Self {
+    pub fn new(base_url: String, timeout: u64) -> Self {
         Self {
-            client: Client::new(),
+            client: Client::builder()
+                .timeout(Duration::from_secs(timeout))
+                .build()
+                .unwrap_or_else(|_| Client::new()),
             base_url,
         }
     }
@@ -34,15 +38,36 @@ impl OllamaClient {
         model: &str, 
         system: &str, 
         prompt: &str, 
-        options: Option<HashMap<String, serde_json::Value>>
+        options: Option<ModelOptions>,
+        runtime: Option<ModelRuntime>,
     ) -> anyhow::Result<String> {
         let url = format!("{}/api/generate", self.base_url);
+        
+        // Merge options and runtime into a single JSON object for Ollama
+        let mut combined_options = serde_json::json!({});
+        
+        if let Some(opts) = options {
+            if let serde_json::Value::Object(mut map) = serde_json::to_value(opts)? {
+                if let serde_json::Value::Object(ref mut combined_map) = combined_options {
+                    combined_map.append(&mut map);
+                }
+            }
+        }
+        
+        if let Some(run) = runtime {
+            if let serde_json::Value::Object(mut map) = serde_json::to_value(run)? {
+                if let serde_json::Value::Object(ref mut combined_map) = combined_options {
+                    combined_map.append(&mut map);
+                }
+            }
+        }
+
         let req = GenerateRequest {
             model: model.to_string(),
             prompt: prompt.to_string(),
             system: system.to_string(),
             stream: false,
-            options,
+            options: combined_options,
         };
 
         let res = self.client.post(url).json(&req).send().await?;
