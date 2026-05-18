@@ -61,6 +61,9 @@ impl OllamaClient {
                 }
             }
         }
+        
+        let start = std::time::Instant::now();
+        eprintln!(">>> Tenchi-MCP: Starting inference using model '{}'...", model);
 
         let req = GenerateRequest {
             model: model.to_string(),
@@ -72,6 +75,25 @@ impl OllamaClient {
 
         let res = self.client.post(url).json(&req).send().await?;
         let data: GenerateResponse = res.json().await?;
-        Ok(data.response)
+        
+        let duration = start.elapsed();
+        eprintln!(">>> Tenchi-MCP: Inference complete in {:.2}s", duration.as_secs_f32());
+
+        // Basic cleanup: remove <think> blocks and end tokens
+        let mut response = data.response;
+        
+        // Remove <think>...</think> blocks
+        while let (Some(start), Some(end)) = (response.find("<think>"), response.find("</think>")) {
+            response.replace_range(start..end + 8, "");
+        }
+
+        if let Some(pos) = response.find("<|endoftext|>") {
+            response.truncate(pos);
+        }
+        if let Some(pos) = response.find("<|im_start|>") {
+            response.truncate(pos);
+        }
+        
+        Ok(response.trim().to_string())
     }
 }
