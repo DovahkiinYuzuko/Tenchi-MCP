@@ -2,6 +2,7 @@ use reqwest::Client;
 use serde::{Serialize, Deserialize};
 use std::time::Duration;
 use crate::config::{ModelOptions, ModelRuntime};
+use tokio::time::interval;
 
 #[derive(Serialize)]
 struct GenerateRequest {
@@ -15,6 +16,16 @@ struct GenerateRequest {
 #[derive(Deserialize)]
 struct GenerateResponse {
     response: String,
+}
+
+#[derive(Deserialize)]
+struct TagsResponse {
+    models: Vec<OllamaModel>,
+}
+
+#[derive(Deserialize)]
+struct OllamaModel {
+    name: String,
 }
 
 pub struct OllamaClient {
@@ -33,6 +44,13 @@ impl OllamaClient {
         }
     }
 
+    pub async fn list_models(&self) -> anyhow::Result<Vec<String>> {
+        let url = format!("{}/api/tags", self.base_url);
+        let res = self.client.get(url).send().await?;
+        let data: TagsResponse = res.json().await?;
+        Ok(data.models.into_iter().map(|m| m.name).collect())
+    }
+
     pub async fn generate(
         &self, 
         model: &str, 
@@ -43,9 +61,7 @@ impl OllamaClient {
     ) -> anyhow::Result<String> {
         let url = format!("{}/api/generate", self.base_url);
         
-        // Merge options and runtime into a single JSON object for Ollama
         let mut combined_options = serde_json::json!({});
-        
         if let Some(opts) = options {
             if let serde_json::Value::Object(mut map) = serde_json::to_value(opts)? {
                 if let serde_json::Value::Object(ref mut combined_map) = combined_options {
@@ -53,7 +69,6 @@ impl OllamaClient {
                 }
             }
         }
-        
         if let Some(run) = runtime {
             if let serde_json::Value::Object(mut map) = serde_json::to_value(run)? {
                 if let serde_json::Value::Object(ref mut combined_map) = combined_options {
@@ -73,20 +88,32 @@ impl OllamaClient {
             options: combined_options,
         };
 
-        let res = self.client.post(url).json(&req).send().await?;
+        // Spawn a task to print "Thinking..." every second
+        let model_name = model.to_string();
+        let timer_handle = tokio::spawn(async move {
+            let mut ticker = interval(Duration::from_secs(1));
+            ticker.tick().await; // skip immediately
+            loop {
+                ticker.tick().await;
+                let elapsed = start.elapsed().as_secs();
+                eprint!("\r>>> Tenchi-MCP: Thinking with '{}'... ({}s)   ", model_name, elapsed);
+            }
+        });
+
+        let res = self.client.post(url).json(&req).send().await;
+        timer_handle.abort(); // Stop the timer
+        eprint!("\n"); // Move to next line after timer
+
+        let res = res?;
         let data: GenerateResponse = res.json().await?;
         
         let duration = start.elapsed();
         eprintln!(">>> Tenchi-MCP: Inference complete in {:.2}s", duration.as_secs_f32());
 
-        // Basic cleanup: remove <think> blocks and end tokens
         let mut response = data.response;
-        
-        // Remove <think>...</think> blocks
         while let (Some(start), Some(end)) = (response.find("<think>"), response.find("</think>")) {
             response.replace_range(start..end + 8, "");
         }
-
         if let Some(pos) = response.find("<|endoftext|>") {
             response.truncate(pos);
         }

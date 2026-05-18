@@ -54,8 +54,6 @@ impl ServerHandler for TenchiHandler {
         match params.name.as_str() {
             "list_local_models" => {
                 let mut models = self.config.models.clone();
-                // Sort by priority (higher priority first or lower value first? usually lower value = higher priority)
-                // Let's assume lower value = higher priority as per usual conventions
                 models.sort_by_key(|m| m.priority);
 
                 let models_info = models.iter().map(|m| {
@@ -92,11 +90,29 @@ impl ServerHandler for TenchiHandler {
 #[tokio::main]
 async fn main() -> SdkResult<()> {
     let config = Config::from_file("models_config.toml").map_err(|e| {
-        eprintln!("Failed to load config: {}", e);
+        eprintln!(">>> Tenchi-MCP: CRITICAL ERROR - Failed to load config: {}", e);
         std::process::exit(1);
     }).unwrap();
 
     let client = OllamaClient::new(config.global.ollama_url.clone(), config.global.default_timeout);
+
+    // Startup check: Verify if Ollama is running and models exist
+    eprintln!(">>> Tenchi-MCP: Initializing and checking Ollama connectivity...");
+    match client.list_models().await {
+        Ok(installed_models) => {
+            eprintln!(">>> Tenchi-MCP: Connected to Ollama successfully.");
+            for model_cfg in &config.models {
+                if !installed_models.contains(&model_cfg.name) && 
+                   !installed_models.iter().any(|m| m.starts_with(&format!("{}:", model_cfg.name))) {
+                    eprintln!(">>> Tenchi-MCP: WARNING - Model '{}' (Role: {}) is not installed in Ollama.", model_cfg.name, model_cfg.role);
+                }
+            }
+        }
+        Err(e) => {
+            eprintln!(">>> Tenchi-MCP: WARNING - Could not connect to Ollama at {}: {}", config.global.ollama_url, e);
+            eprintln!(">>> Tenchi-MCP: Please ensure Ollama is running.");
+        }
+    }
 
     let server_details = InitializeResult {
         server_info: Implementation {
@@ -128,5 +144,6 @@ async fn main() -> SdkResult<()> {
         message_observer: None,
     });
 
+    eprintln!(">>> Tenchi-MCP: Server started and waiting for requests.");
     server.start().await
 }
