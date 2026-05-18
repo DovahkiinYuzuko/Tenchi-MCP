@@ -1,0 +1,12 @@
+{
+  "name": "tenchi-mcp",
+  "version": "0.1.0",
+  "description": "Hybrid Cloud/Local LLM Inference Orchestrator via MCP",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "tenchi": {
+      "command": "${extensionPath}${/}target${/}debug${/}tenchi-mcp",
+      "cwd": "${extensionPath}"
+    }
+  }
+}
