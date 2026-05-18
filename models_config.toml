@@ -1,0 +1,17 @@
+[global]
+ollama_url = "http://localhost:11434"
+default_timeout = 300
+
+[[models]]
+name = "gemma-3-4b-it-abliterated-GGUF:Q4_K_M"
+role = "Coder"
+description = "Main model for code generation and small fixes."
+priority = 1
+system_prompt = "You are an expert software engineer. Provide concise and accurate code."
+
+[[models]]
+name = "jaahas/qwen3.5-uncensored:4b"
+role = "Assistant"
+description = "General purpose assistant for chat and advice."
+priority = 2
+system_prompt = "You are a helpful and friendly assistant."
