@@ -1,13 +1,11 @@
 {
   "name": "tenchi-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Hybrid Cloud/Local LLM Inference Orchestrator via MCP",
   "contextFileName": "GEMINI.md",
-  "build": "cargo build --release",
   "mcpServers": {
     "tenchi": {
-      "command": "cargo",
-      "args": ["run", "--release", "--quiet"]
+      "command": "./tenchi-mcp"
     }
   }
 }
