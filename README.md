@@ -10,12 +10,25 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 
 単純なタスクや機密性の高いデータの処理をローカルモデルに委譲することで、クラウドのトークン消費を抑えつつ、セキュアで効率的な開発環境を実現します。
 
-### 主な機能
+### 特徴
 
 - **ハイブリッド推論**: タスクの性質に応じて、クラウドモデルからローカルモデルへ処理を自動的に委譲。
-- **クロスプラットフォーム対応**: Windows、macOS、Linuxのすべてで動作確認済み。
+- **クロスプラットフォーム設計**: Windows, macOS, Linux をサポートするように設計されています（開発環境は Windows 11 です）。
 - **柔軟な設定**: `models_config.toml` により、モデルごとの役割、優先度、システムプロンプト、各種パラメータを詳細に設定可能。
 - **推論モニタリング**: ローカル推論の経過時間やステータスをリアルタイムで表示。
+
+### パフォーマンスと制限事項
+
+- **推論速度**: ローカル環境での推論速度は、お使いのハードウェア（CPU/GPU/VRAM）に大きく依存します。クラウドモデルと比較して応答に時間がかかる場合があることをあらかじめご了承ください。
+- **動作確認**: 現在、Windows 11 環境での動作を確認しています。macOS および Linux については設計上考慮されていますが、実機での検証は未実施です。
+
+### 前提条件
+
+本ツールを使用するには、ローカル環境に **Ollama** がインストールされている必要があります。
+
+- **Ollama 公式サイト**: [https://ollama.com/](https://ollama.com/)
+
+インストール後、`models_config.toml` に設定する予定のモデルをあらかじめ `ollama run <model_name>` 等でプルしておいてください。
 
 ### インストール方法
 
@@ -154,9 +167,14 @@ It enables a secure and efficient development environment by delegating simple t
 ### Features
 
 - **Hybrid Inference**: Automatically delegate tasks from cloud models to local models based on task requirements.
-- **Cross-Platform**: Fully supported on Windows, macOS, and Linux.
+- **Cross-Platform Design**: Designed to support Windows, macOS, and Linux (Primary development environment is Windows 11).
 - **Flexible Configuration**: Fine-grained control over roles, priorities, system prompts, and parameters for each model via `models_config.toml`.
 - **Inference Monitoring**: Real-time display of elapsed time and status for local inferences.
+
+### Performance and Limitations
+
+- **Inference Speed**: The speed of local inference heavily depends on your hardware (CPU/GPU/VRAM). Please be aware that responses may take significantly longer compared to cloud-based models.
+- **Platform Verification**: Currently, operation has been verified in a Windows 11 environment. Support for macOS and Linux is included in the design, but has not yet been verified on actual hardware.
 
 ### Prerequisites
 
