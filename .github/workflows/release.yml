@@ -9,24 +9,35 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Release - ${{ matrix.target }}
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Release
+        run: gh release create ${{ github.ref_name }} --draft --title "${{ github.ref_name }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-release:
+    name: Build - ${{ matrix.target }}
+    needs: create-release
     strategy:
       fail-fast: false
       matrix:
         include:
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-            asset_name: win32.x64.tenchi-mcp.zip
+            platform: win32.x64
           - target: x86_64-apple-darwin
             os: macos-latest
-            asset_name: darwin.x64.tenchi-mcp.tar.gz
+            platform: darwin.x64
           - target: aarch64-apple-darwin
             os: macos-latest
-            asset_name: darwin.arm64.tenchi-mcp.tar.gz
+            platform: darwin.arm64
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            asset_name: linux.x64.tenchi-mcp.tar.gz
+            platform: linux.x64
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -42,5 +53,16 @@ jobs:
         with:
           bin: tenchi-mcp
           target: ${{ matrix.target }}
-          archive: ${{ matrix.asset_name }}
+          archive: ${{ matrix.platform }}.tenchi-mcp
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-release:
+    name: Publish Release
+    needs: build-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish Release
+        run: gh release edit ${{ github.ref_name }} --draft=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
