@@ -119,41 +119,54 @@ LLMの生成挙動を制御します。
 
 ```toml
 [global]
+# Ollama APIのベースURL / Base URL for Ollama API
 ollama_url = "http://localhost:11434"
+# デフォルトのタイムアウト（秒） / Default timeout in seconds
 default_timeout = 300
 
-# コード生成に特化したモデルの例
+# コーディング・ロジック実装用 / Specialized for coding and logic implementation
 [[models]]
-name = "sushi-coder-custom:latest"
+name = "qwen3.6-coder:27b"
 role = "Coder"
-description = "コード生成およびロジック実装用のメインモデル"
+description = "Specialized in software engineering. High performance in SWE-bench and logical reasoning."
 priority = 1
-system_prompt = "あなたは熟練したソフトウェアエンジニアです。簡潔で正確なコードを提供してください。"
+system_prompt = "You are an expert software engineer. Provide accurate implementation and rigorous logic."
 
 [models.options]
 temperature = 0.2
-num_ctx = 8192
+top_p = 0.95
+num_ctx = 32768
+num_predict = -1
 
-# コードレビューに特化したリソース制限付きの例
+# 高度な推論・汎用アシスタント / Advanced reasoning and general assistant
 [[models]]
-name = "carstenuhlig/omnicoder-9b:latest"
-role = "Reviewer"
-description = "コードレビューや調査に特化"
+name = "gemma4:31b"
+role = "Expert"
+description = "Google's high-density model. Strong reasoning and general intelligence."
 priority = 2
-system_prompt = "あなたはシニアコードレビュアーです。批判的かつ建設的なフィードバックを提供してください。"
+system_prompt = "You are a highly intelligent and precise assistant. Provide detailed, accurate, and well-reasoned information."
+
+[models.options]
+temperature = 0.7
+num_ctx = 32768
+
+# エッジ・軽量環境用 / For edge and lightweight environments
+[[models]]
+name = "gemma4:e4b"
+role = "Lite"
+description = "Fast and efficient model for simple tasks and low-resource environments."
+priority = 3
+system_prompt = "You are a concise and efficient assistant. Provide short, direct, and accurate answers."
 
 [models.options]
 temperature = 0.5
-num_ctx = 16384
-
-[models.runtime]
-num_thread = 6
+num_ctx = 8192
 low_vram = true
 ```
 
 ### 利用可能なツール
 
-- `list_local_models`: 利用可能なローカルモデルの一覧と、それぞれの役割・説明を取得します。
+- `list_local_models`: 利用可能なローカルモデルの一覧と、それぞれの役割・説明をJSON形式で取得します。
 - `local_generate`: 指定したローカルモデルに対して推論をリクエストします。
 
 ---
@@ -273,39 +286,52 @@ Controls execution resources.
 
 ```toml
 [global]
+# Ollama APIのベースURL / Base URL for Ollama API
 ollama_url = "http://localhost:11434"
+# デフォルトのタイムアウト（秒） / Default timeout in seconds
 default_timeout = 300
 
-# Example of a model specialized for code generation
+# Specialized for coding and logic implementation
 [[models]]
-name = "sushi-coder-custom:latest"
+name = "qwen3.6-coder:27b"
 role = "Coder"
-description = "Main model for code generation and logic implementation"
+description = "Specialized in software engineering. High performance in SWE-bench and logical reasoning."
 priority = 1
-system_prompt = "You are an expert software engineer. Provide concise and accurate code."
+system_prompt = "You are an expert software engineer. Provide accurate implementation and rigorous logic."
 
 [models.options]
 temperature = 0.2
-num_ctx = 8192
+top_p = 0.95
+num_ctx = 32768
+num_predict = -1
 
-# Example of a model specialized for code review with resource limits
+# Advanced reasoning and general assistant
 [[models]]
-name = "carstenuhlig/omnicoder-9b:latest"
-role = "Reviewer"
-description = "Specialized in code review and research"
+name = "gemma4:31b"
+role = "Expert"
+description = "Google's high-density model. Strong reasoning and general intelligence."
 priority = 2
-system_prompt = "You are a senior code reviewer. Provide critical and constructive feedback."
+system_prompt = "You are a highly intelligent and precise assistant. Provide detailed, accurate, and well-reasoned information."
+
+[models.options]
+temperature = 0.7
+num_ctx = 32768
+
+# For edge and lightweight environments
+[[models]]
+name = "gemma4:e4b"
+role = "Lite"
+description = "Fast and efficient model for simple tasks and low-resource environments."
+priority = 3
+system_prompt = "You are a concise and efficient assistant. Provide short, direct, and accurate answers."
 
 [models.options]
 temperature = 0.5
-num_ctx = 16384
-
-[models.runtime]
-num_thread = 6
+num_ctx = 8192
 low_vram = true
 ```
 
 ### Available Tools
 
-- `list_local_models`: Retrieves a list of available local models with their roles and descriptions.
+- `list_local_models`: Retrieves a list of available local models with their roles and descriptions in JSON format.
 - `local_generate`: Requests inference from a specified local model.
