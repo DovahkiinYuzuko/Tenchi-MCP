@@ -13,7 +13,7 @@ As an AI agent, you should use this server to delegate specific tasks to local m
 
 ### 3.1. `list_local_models`
 - **Purpose**: Retrieves the list of locally available models defined in `models_config.toml`.
-- **Output**: A string containing the name, role, priority, and description for each model.
+- **Output**: A JSON string containing an array of model objects (name, role, priority, and description).
 - **Usage**: Call this tool at the beginning of a task to understand which local resources are available and their specific strengths.
 
 ### 3.2. `local_generate`
