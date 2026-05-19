@@ -1,76 +1,76 @@
 ﻿# Tenchi-MCP
 
-[譌･譛ｬ隱枉(#譌･譛ｬ隱・ | [English](#english)
+[日本語](#日本語) | [English](#english)
 
 ---
 
-## 譌･譛ｬ隱・
+## 日本語
 
-Tenchi-MCP・亥､ｩ蝨ｰ-MCP・峨・縲√け繝ｩ繧ｦ繝峨・繝ｼ繧ｹ縺ｮ蠑ｷ蜉帙↑LLM・・emini繧Гlaude縺ｪ縺ｩ・峨→縲√Ο繝ｼ繧ｫ繝ｫ迺ｰ蠅・〒蜍穂ｽ懊☆繧記LM・・llama邨檎罰・峨ｒ騾｣謳ｺ縺輔○繧九◆繧√・繝上う繝悶Μ繝・ラ謗ｨ隲悶が繝ｼ繧ｱ繧ｹ繝医Ξ繝ｼ繧ｿ繝ｼ縺ｧ縺吶・
+Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（GeminiやClaudeなど）と、ローカル環境で動作するLLM（Ollama経由）を連携させるためのハイブリッド推論オーケストレーターです。
 
-蜊倡ｴ斐↑繧ｿ繧ｹ繧ｯ繧・ｩ溷ｯ・ｧ縺ｮ鬮倥＞繝・・繧ｿ縺ｮ蜃ｦ逅・ｒ繝ｭ繝ｼ繧ｫ繝ｫ繝｢繝・Ν縺ｫ蟋碑ｭｲ縺吶ｋ縺薙→縺ｧ縲√け繝ｩ繧ｦ繝峨・繝医・繧ｯ繝ｳ豸郁ｲｻ繧呈椛縺医▽縺､縲√そ繧ｭ繝･繧｢縺ｧ蜉ｹ邇・噪縺ｪ髢狗匱迺ｰ蠅・ｒ螳溽樟縺励∪縺吶・
+単純なタスクや機密性の高いデータの処理をローカルモデルに委譲することで、クラウドのトークン消費を抑えつつ、セキュアで効率的な開発環境を実現します。
 
-### 迚ｹ蠕ｴ
+### 特徴
 
-- **繝上う繝悶Μ繝・ラ謗ｨ隲・*: 繧ｿ繧ｹ繧ｯ縺ｮ諤ｧ雉ｪ縺ｫ蠢懊§縺ｦ縲√け繝ｩ繧ｦ繝峨Δ繝・Ν縺九ｉ繝ｭ繝ｼ繧ｫ繝ｫ繝｢繝・Ν縺ｸ蜃ｦ逅・ｒ閾ｪ蜍慕噪縺ｫ蟋碑ｭｲ縲・
-- **繧ｯ繝ｭ繧ｹ繝励Λ繝・ヨ繝輔か繝ｼ繝險ｭ險・*: Windows, macOS, Linux 繧偵し繝昴・繝医☆繧九ｈ縺・↓險ｭ險医＆繧後※縺・∪縺呻ｼ磯幕逋ｺ迺ｰ蠅・・ Windows 11 縺ｧ縺呻ｼ峨・
-- **譟碑ｻ溘↑險ｭ螳・*: `models_config.toml` 縺ｫ繧医ｊ縲√Δ繝・Ν縺斐→縺ｮ蠖ｹ蜑ｲ縲∝━蜈亥ｺｦ縲√す繧ｹ繝・Β繝励Ο繝ｳ繝励ヨ縲∝推遞ｮ繝代Λ繝｡繝ｼ繧ｿ繧定ｩｳ邏ｰ縺ｫ險ｭ螳壼庄閭ｽ縲・
-- **謗ｨ隲悶Δ繝九ち繝ｪ繝ｳ繧ｰ**: 繝ｭ繝ｼ繧ｫ繝ｫ謗ｨ隲悶・邨碁℃譎る俣繧・せ繝・・繧ｿ繧ｹ繧偵Μ繧｢繝ｫ繧ｿ繧､繝縺ｧ陦ｨ遉ｺ縲・
+- **ハイブリッド推論**: タスクの性質に応じて、クラウドモデルからローカルモデルへ処理を自動的に委譲。
+- **クロスプラットフォーム設計**: Windows, macOS, Linux をサポートするように設計されています（開発環境は Windows 11 です）。
+- **柔軟な設定**: `models_config.toml` により、モデルごとの役割、優先度、システムプロンプト、各種パラメータを詳細に設定可能。
+- **推論モニタリング**: ローカル推論の経過時間やステータスをリアルタイムで表示。
 
-### 繝代ヵ繧ｩ繝ｼ繝槭Φ繧ｹ縺ｨ蛻ｶ髯蝉ｺ矩・
+### パフォーマンスと制限事項
 
-- **謗ｨ隲夜溷ｺｦ**: 繝ｭ繝ｼ繧ｫ繝ｫ迺ｰ蠅・〒縺ｮ謗ｨ隲夜溷ｺｦ縺ｯ縲√♀菴ｿ縺・・繝上・繝峨え繧ｧ繧｢・・PU/GPU/VRAM・峨↓螟ｧ縺阪￥萓晏ｭ倥＠縺ｾ縺吶ゅけ繝ｩ繧ｦ繝峨Δ繝・Ν縺ｨ豈碑ｼ・＠縺ｦ蠢懃ｭ斐↓譎る俣縺後°縺九ｋ蝣ｴ蜷医′縺ゅｋ縺薙→繧偵≠繧峨°縺倥ａ縺比ｺ・価縺上□縺輔＞縲・
-- **蜍穂ｽ懃｢ｺ隱・*: 迴ｾ蝨ｨ縲仝indows 11 迺ｰ蠅・〒縺ｮ蜍穂ｽ懊ｒ遒ｺ隱阪＠縺ｦ縺・∪縺吶ＮacOS 縺翫ｈ縺ｳ Linux 縺ｫ縺､縺・※縺ｯ險ｭ險井ｸ願・・縺輔ｌ縺ｦ縺・∪縺吶′縲∝ｮ滓ｩ溘〒縺ｮ讀懆ｨｼ縺ｯ譛ｪ螳滓命縺ｧ縺吶・
+- **推論速度**: ローカル環境での推論速度は、お使いのハードウェア（CPU/GPU/VRAM）に大きく依存します。クラウドモデルと比較して応答に時間がかかる場合があることをあらかじめご了承ください。
+- **動作確認**: 現在、Windows 11 環境での動作を確認しています。macOS および Linux については設計上考慮されていますが、実機での検証は未実施です。
 
-### 蜑肴署譚｡莉ｶ
+### 前提条件
 
-譛ｬ繝・・繝ｫ繧剃ｽｿ逕ｨ縺吶ｋ縺ｫ縺ｯ縲√Ο繝ｼ繧ｫ繝ｫ迺ｰ蠅・↓ **Ollama** 縺後う繝ｳ繧ｹ繝医・繝ｫ縺輔ｌ縺ｦ縺・ｋ蠢・ｦ√′縺ゅｊ縺ｾ縺吶・
+本ツールを使用するには、ローカル環境に **Ollama** がインストールされている必要があります。
 
-- **Ollama 蜈ｬ蠑上し繧､繝・*: [https://ollama.com/](https://ollama.com/)
+- **Ollama 公式サイト**: [https://ollama.com/](https://ollama.com/)
 
-繧､繝ｳ繧ｹ繝医・繝ｫ蠕後～models_config.toml` 縺ｫ險ｭ螳壹☆繧倶ｺ亥ｮ壹・繝｢繝・Ν繧偵≠繧峨°縺倥ａ `ollama run <model_name>` 遲峨〒繝励Ν縺励※縺翫＞縺ｦ縺上□縺輔＞縲・
+インストール後、`models_config.toml` に設定する予定のモデルをあらかじめ `ollama run <model_name>` 等でプルしておいてください。
 
-### 繧､繝ｳ繧ｹ繝医・繝ｫ譁ｹ豕・
+### インストール方法
 
-縺贋ｽｿ縺・・繧ｯ繝ｩ繧､繧｢繝ｳ繝医↓蜷医ｏ縺帙※縲∽ｻ･荳九・謇矩・〒繧､繝ｳ繧ｹ繝医・繝ｫ縺励※縺上□縺輔＞縲・
+お使いのクライアントに合わせて、以下の手順でインストールしてください。
 
-#### 1. Gemini CLI 繝ｦ繝ｼ繧ｶ繝ｼ
-Gemini CLI繧剃ｽｿ逕ｨ縺励※縺・ｋ蝣ｴ蜷医∵僑蠑ｵ讖溯・縺ｨ縺励※繧､繝ｳ繧ｹ繝医・繝ｫ縺吶ｋ縺薙→縺ｧ繝舌う繝翫Μ縺ｮ閾ｪ蜍輔ム繧ｦ繝ｳ繝ｭ繝ｼ繝峨′蛻ｩ逕ｨ蜿ｯ閭ｽ縺ｧ縺吶ら｢ｺ螳溘↑繧､繝ｳ繧ｹ繝医・繝ｫ縺ｮ縺溘ａ縺ｫ縲∽ｻ･荳九・繧医≧縺ｫ繝舌・繧ｸ繝ｧ繝ｳ繧呈欠螳壹＠縺ｦ螳溯｡後☆繧九％縺ｨ繧呈耳螂ｨ縺励∪縺吶・
+#### 1. Gemini CLI ユーザー
+Gemini CLIを使用している場合、拡張機能としてインストールすることでバイナリの自動ダウンロードが利用可能です。確実なインストールのために、以下のようにバージョンを指定して実行することを推奨します。
 
 ```bash
 gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.8
 ```
-窶ｻ繧､繝ｳ繧ｹ繝医・繝ｫ譎ゅ↓蜷・・繝ｩ繝・ヨ繝輔か繝ｼ繝蜷代￠縺ｮ繝薙Ν繝画ｸ医∩繝舌う繝翫Μ縺ｨ險ｭ螳壹ヵ繧｡繧､繝ｫ縺瑚・蜍慕噪縺ｫ螻暮幕縺輔ｌ縺ｾ縺吶よ怙譁ｰ縺ｮ繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝峨°繧峨う繝ｳ繧ｹ繝医・繝ｫ縺励※閾ｪ蛻・〒繝薙Ν繝峨＠縺溘＞蝣ｴ蜷医・ `--ref main` 繧剃ｽｿ逕ｨ縺励※縺上□縺輔＞縲・
+※インストール時に各プラットフォーム向けのビルド済みバイナリと設定ファイルが自動的に展開されます。最新のソースコードからインストールして自分でビルドしたい場合は `--ref main` を使用してください。
 
-#### 2. Claude Code 繝ｦ繝ｼ繧ｶ繝ｼ
-1. 繝ｪ繝昴ず繝医Μ繧偵け繝ｭ繝ｼ繝ｳ縺励※繝薙Ν繝峨＠縺ｾ縺吶・
+#### 2. Claude Code ユーザー
+1. リポジトリをクローンしてビルドします。
    ```bash
    git clone https://github.com/DovahkiinYuzuko/Tenchi-MCP
    cd Tenchi-MCP
    cargo build --release
    ```
-2. MCP繧ｵ繝ｼ繝舌・繧定ｿｽ蜉縺励∪縺吶・
+2. MCPサーバーを追加します。
    ```bash
-   # Windows縺ｮ蝣ｴ蜷・
+   # Windowsの場合
    claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp.exe
    
-   # macOS / Linux 縺ｮ蝣ｴ蜷・
+   # macOS / Linux の場合
    claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp
    ```
 
-#### 3. Codex CLI (OpenAI) 繝ｦ繝ｼ繧ｶ繝ｼ
-Codex CLI縺ｯ縲＾penAI縺梧署萓帙☆繧玖・蠕句梛繧ｽ繝輔ヨ繧ｦ繧ｧ繧｢繧ｨ繝ｳ繧ｸ繝九い繝ｪ繝ｳ繧ｰ繧ｨ繝ｼ繧ｸ繧ｧ繝ｳ繝医・繝ｩ繝・ヨ繝輔か繝ｼ繝縺ｧ縺吶・
+#### 3. Codex CLI (OpenAI) ユーザー
+Codex CLIは、OpenAIが提供する自律型ソフトウェアエンジニアリングエージェントプラットフォームです。
 
-1. 繧ｯ繝ｭ繝ｼ繝ｳ縺励※繝薙Ν繝峨＠縺ｾ縺呻ｼ井ｸ願ｨ倥靴laude Code縲阪・謇矩・1 縺ｨ蜷後§・峨・
-2. `~/.codex/config.toml` 縺ｫ繧ｵ繝ｼ繝舌・繧定ｿｽ蜉縺励∪縺吶・
+1. クローンしてビルドします（上記「Claude Code」の手順 1 と同じ）。
+2. `~/.codex/config.toml` にサーバーを追加します。
    ```bash
    codex mcp add tenchi-mcp --command ./target/release/tenchi-mcp
    ```
-   窶ｻWindows縺ｮ蝣ｴ蜷医・諡｡蠑ｵ蟄・`.exe` 繧貞性繧√※縺上□縺輔＞縲・
+   ※Windowsの場合は拡張子 `.exe` を含めてください。
 
-#### 4. Claude Desktop 繝ｦ繝ｼ繧ｶ繝ｼ
-1. 繧ｯ繝ｭ繝ｼ繝ｳ縺励※繝薙Ν繝峨＠縺ｾ縺呻ｼ井ｸ願ｨ倥靴laude Code縲阪・謇矩・1 縺ｨ蜷後§・峨・
-2. 險ｭ螳壹ヵ繧｡繧､繝ｫ・・claude_desktop_config.json`・峨ｒ邱ｨ髮・＠縺ｾ縺吶・
+#### 4. Claude Desktop ユーザー
+1. クローンしてビルドします（上記「Claude Code」の手順 1 と同じ）。
+2. 設定ファイル（`claude_desktop_config.json`）を編集します。
    ```json
    {
      "mcpServers": {
@@ -80,51 +80,51 @@ Codex CLI縺ｯ縲＾penAI縺梧署萓帙☆繧玖・蠕句梛繧ｽ繝輔ヨ繧
      }
    }
    ```
-   窶ｻ繝代せ縺ｯ蠢・★ **邨ｶ蟇ｾ繝代せ** 縺ｧ謖・ｮ壹＠縲＾S縺ｫ蜷医ｏ縺帙※螳溯｡後ヵ繧｡繧､繝ｫ縺ｮ諡｡蠑ｵ蟄撰ｼ・.exe` 遲会ｼ峨ｒ驕ｩ蛻・↓險ｭ螳壹＠縺ｦ縺上□縺輔＞縲・
+   ※パスは必ず **絶対パス** で指定し、OSに合わせて実行ファイルの拡張子（`.exe` 等）を適切に設定してください。
 
-### 險ｭ螳壽婿豕・(`models_config.toml`)
+### 設定方法 (`models_config.toml`)
 
-`models_config.toml` 繧堤ｷｨ髮・☆繧九％縺ｨ縺ｧ縲∽ｽｿ逕ｨ縺吶ｋ繝ｭ繝ｼ繧ｫ繝ｫ繝｢繝・Ν縺ｨ謗ｨ隲悶ヱ繝ｩ繝｡繝ｼ繧ｿ繧定ｩｳ邏ｰ縺ｫ蛻ｶ蠕｡縺ｧ縺阪∪縺吶・
+`models_config.toml` を編集することで、使用するローカルモデルと推論パラメータを詳細に制御できます。
 
-#### 繧ｰ繝ｭ繝ｼ繝舌Ν險ｭ螳・(`[global]`)
-- `ollama_url`: Ollama API縺ｮ繝吶・繧ｹURL・医ョ繝輔か繝ｫ繝・ "http://localhost:11434"・・
-- `default_timeout`: HTTP繝ｪ繧ｯ繧ｨ繧ｹ繝医・繧ｿ繧､繝繧｢繧ｦ繝育ｧ呈焚縲・
+#### グローバル設定 (`[global]`)
+- `ollama_url`: Ollama APIのベースURL（デフォルト: "http://localhost:11434"）
+- `default_timeout`: HTTPリクエストのタイムアウト秒数。
 
-#### 繝｢繝・Ν險ｭ螳・(`[[models]]`)
-- `name`: Ollama縺ｫ逋ｻ骭ｲ縺輔ｌ縺ｦ縺・ｋ繝｢繝・Ν蜷阪・
-- `role`: 繝｢繝・Ν縺ｮ蠖ｹ蜑ｲ・井ｾ・ "Coder", "Reviewer", "Generalist"・峨・
-- `description`: 繧ｯ繝ｩ繧ｦ繝峨お繝ｼ繧ｸ繧ｧ繝ｳ繝医′繧ｿ繧ｹ繧ｯ蟋碑ｭｲ繧貞愛譁ｭ縺吶ｋ縺溘ａ縺ｮ隧ｳ邏ｰ縺ｪ隱ｬ譏弱・
-- `priority`: 繝｢繝・Ν荳隕ｧ縺ｮ陦ｨ遉ｺ蜆ｪ蜈亥ｺｦ縲・
-- `system_prompt`: 隧ｲ蠖薙Δ繝・Ν縺ｧ縺ｮ謗ｨ隲匁凾縺ｫ菴ｿ逕ｨ縺輔ｌ繧句崋譛峨・繧ｷ繧ｹ繝・Β繝励Ο繝ｳ繝励ヨ縲・
+#### モデル設定 (`[[models]]`)
+- `name`: Ollamaに登録されているモデル名。
+- `role`: モデルの役割（例: "Coder", "Reviewer", "Generalist"）。
+- `description`: クラウドエージェントがタスク委譲を判断するための詳細な説明。
+- `priority`: モデル一覧の表示優先度。
+- `system_prompt`: 該当モデルでの推論時に使用される固有のシステムプロンプト。
 
-#### 謗ｨ隲悶が繝励す繝ｧ繝ｳ (`[models.options]`)
-LLM縺ｮ逕滓・謖吝虚繧貞宛蠕｡縺励∪縺吶・
-- `temperature`: 逕滓・縺ｮ螟壽ｧ俶ｧ・・.0 - 1.0・峨・
-- `top_p`: 譬ｸ繧ｵ繝ｳ繝励Μ繝ｳ繧ｰ縺ｮ髢ｾ蛟､縲・
-- `top_k`: 蛟呵｣懷腰隱樊焚縺ｮ蛻ｶ髯舌・
-- `repeat_penalty`: 郢ｰ繧願ｿ斐＠縺ｮ謚大宛縲・
-- `num_ctx`: 繧ｳ繝ｳ繝・く繧ｹ繝医し繧､繧ｺ・医ヨ繝ｼ繧ｯ繝ｳ謨ｰ・峨・
-- `num_predict`: 譛螟ｧ逕滓・繝医・繧ｯ繝ｳ謨ｰ縲・
-- `stop`: 蛛懈ｭ｢繧ｷ繝ｼ繧ｯ繧ｨ繝ｳ繧ｹ縺ｮ繝ｪ繧ｹ繝茨ｼ井ｾ・ `["\nUser:"]`・峨・
-- `seed`: 荵ｱ謨ｰ繧ｷ繝ｼ繝峨・
-- 縺昴・莉悶＾llama API縺後し繝昴・繝医☆繧倶ｻｻ諢上・繧ｪ繝励す繝ｧ繝ｳ縲・
+#### 推論オプション (`[models.options]`)
+LLMの生成挙動を制御します。
+- `temperature`: 生成の多様性（0.0 - 1.0）。
+- `top_p`: 核サンプリングの閾値。
+- `top_k`: 候補単語数の制限。
+- `repeat_penalty`: 繰り返しの抑制。
+- `num_ctx`: コンテキストサイズ（トークン数）。
+- `num_predict`: 最大生成トークン数。
+- `stop`: 停止シークエンスのリスト（例: `["\nUser:"]`）。
+- `seed`: 乱数シード。
+- その他、Ollama APIがサポートする任意のオプション。
 
-#### 螳溯｡梧凾險ｭ螳・(`[models.runtime]`)
-螳溯｡後Μ繧ｽ繝ｼ繧ｹ繧貞宛蠕｡縺励∪縺吶・
-- `num_thread`: 菴ｿ逕ｨ縺吶ｋCPU繧ｹ繝ｬ繝・ラ謨ｰ縲・
-- `num_gpu`: GPU縺ｫ繧ｪ繝輔Ο繝ｼ繝峨☆繧九Ξ繧､繝､繝ｼ謨ｰ縲・
-- `low_vram`: VRAM遽邏・Δ繝ｼ繝峨・譛牙柑蛹厄ｼ・rue/false・峨・
+#### 実行時設定 (`[models.runtime]`)
+実行リソースを制御します。
+- `num_thread`: 使用するCPUスレッド数。
+- `num_gpu`: GPUにオフロードするレイヤー数。
+- `low_vram`: VRAM節約モードの有効化（true/false）。
 
-#### 險ｭ螳壻ｾ・(`models_config.toml`)
+#### 設定例 (`models_config.toml`)
 
 ```toml
 [global]
-# Ollama API縺ｮ繝吶・繧ｹURL / Base URL for Ollama API
+# Ollama APIのベースURL / Base URL for Ollama API
 ollama_url = "http://localhost:11434"
-# 繝・ヵ繧ｩ繝ｫ繝医・繧ｿ繧､繝繧｢繧ｦ繝茨ｼ育ｧ抵ｼ・/ Default timeout in seconds
+# デフォルトのタイムアウト（秒） / Default timeout in seconds
 default_timeout = 300
 
-# 繧ｳ繝ｼ繝・ぅ繝ｳ繧ｰ繝ｻ繝ｭ繧ｸ繝・け螳溯｣・畑 / Specialized for coding and logic implementation
+# コーディング・ロジック実装用 / Specialized for coding and logic implementation
 [[models]]
 name = "qwen3.6-coder:27b"
 role = "Coder"
@@ -138,7 +138,7 @@ top_p = 0.95
 num_ctx = 32768
 num_predict = -1
 
-# 鬮伜ｺｦ縺ｪ謗ｨ隲悶・豎守畑繧｢繧ｷ繧ｹ繧ｿ繝ｳ繝・/ Advanced reasoning and general assistant
+# 高度な推論・汎用アシスタント / Advanced reasoning and general assistant
 [[models]]
 name = "gemma4:31b"
 role = "Expert"
@@ -150,7 +150,7 @@ system_prompt = "You are a highly intelligent and precise assistant. Provide det
 temperature = 0.7
 num_ctx = 32768
 
-# 繧ｨ繝・ず繝ｻ霆ｽ驥冗腸蠅・畑 / For edge and lightweight environments
+# エッジ・軽量環境用 / For edge and lightweight environments
 [[models]]
 name = "gemma4:e4b"
 role = "Lite"
@@ -164,10 +164,10 @@ num_ctx = 8192
 low_vram = true
 ```
 
-### 蛻ｩ逕ｨ蜿ｯ閭ｽ縺ｪ繝・・繝ｫ
+### 利用可能なツール
 
-- `list_local_models`: 蛻ｩ逕ｨ蜿ｯ閭ｽ縺ｪ繝ｭ繝ｼ繧ｫ繝ｫ繝｢繝・Ν縺ｮ荳隕ｧ縺ｨ縲√◎繧後◇繧後・蠖ｹ蜑ｲ繝ｻ隱ｬ譏弱ｒJSON蠖｢蠑上〒蜿門ｾ励＠縺ｾ縺吶・
-- `local_generate`: 謖・ｮ壹＠縺溘Ο繝ｼ繧ｫ繝ｫ繝｢繝・Ν縺ｫ蟇ｾ縺励※謗ｨ隲悶ｒ繝ｪ繧ｯ繧ｨ繧ｹ繝医＠縺ｾ縺吶・
+- `list_local_models`: 利用可能なローカルモデルの一覧と、それぞれの役割・説明をJSON形式で取得します。
+- `local_generate`: 指定したローカルモデルに対して推論をリクエストします。
 
 ---
 
@@ -286,9 +286,9 @@ Controls execution resources.
 
 ```toml
 [global]
-# Ollama API縺ｮ繝吶・繧ｹURL / Base URL for Ollama API
+# Ollama APIのベースURL / Base URL for Ollama API
 ollama_url = "http://localhost:11434"
-# 繝・ヵ繧ｩ繝ｫ繝医・繧ｿ繧､繝繧｢繧ｦ繝茨ｼ育ｧ抵ｼ・/ Default timeout in seconds
+# デフォルトのタイムアウト（秒） / Default timeout in seconds
 default_timeout = 300
 
 # Specialized for coding and logic implementation
@@ -335,4 +335,3 @@ low_vram = true
 
 - `list_local_models`: Retrieves a list of available local models with their roles and descriptions in JSON format.
 - `local_generate`: Requests inference from a specified local model.
-
