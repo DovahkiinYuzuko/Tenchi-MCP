@@ -38,7 +38,7 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 Gemini CLIを使用している場合、拡張機能としてインストールすることでバイナリの自動ダウンロードが利用可能です。確実なインストールのために、以下のようにバージョンを指定して実行することを推奨します。
 
 ```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.6
+gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.7
 ```
 ※インストール時に各プラットフォーム向けのビルド済みバイナリと設定ファイルが自動的に展開されます。最新のソースコードからインストールして自分でビルドしたい場合は `--ref main` を使用してください。
 
@@ -205,7 +205,7 @@ Choose the appropriate installation method for your client.
 When using Gemini CLI, you can take advantage of automatic binary download by installing it as an extension. For a reliable installation, it is recommended to specify the version as follows:
 
 ```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.6
+gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.7
 ```
 *Built-in binaries and configuration files for each platform will be automatically deployed upon installation. If you want to install from the latest source code and build it yourself, use `--ref main`.*
 
