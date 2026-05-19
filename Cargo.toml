@@ -10,4 +10,5 @@ serde_json = "1.0"
 toml = "0.8"
 reqwest = { version = "0.11", features = ["json"] }
 anyhow = "1.0"
-mcp-sdk-rs = "0.3"
+rust-mcp-sdk = "0.9"
+async-trait = "0.1"

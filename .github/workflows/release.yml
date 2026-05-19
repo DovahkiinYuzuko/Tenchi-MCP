@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release - ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            asset_name: win32.x64.tenchi-mcp.zip
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            asset_name: darwin.x64.tenchi-mcp.tar.gz
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            asset_name: darwin.arm64.tenchi-mcp.tar.gz
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build and Upload
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: tenchi-mcp
+          target: ${{ matrix.target }}
+          archive: $asset_name
+          token: ${{ secrets.GITHUB_TOKEN }}

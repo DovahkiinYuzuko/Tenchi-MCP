@@ -1,3 +1,23 @@
-/target
-Cargo.lock
-.env
+# Ignore everything by default
+*
+
+# Allow directories so we can whitelist their contents
+!*/
+
+# Whitelist ONLY essential files for build and distribution
+!.gitignore
+!Cargo.toml
+!Cargo.lock
+!gemini-extension.json
+!AGENTS.md
+!GEMINI.md
+!models_config.toml
+!README.md
+!変数関数仕様書.md
+!Tenchi-MCPアイデアログ.md
+
+# Whitelist source code
+!src/**
+
+# Whitelist GitHub workflows
+!.github/**
