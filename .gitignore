@@ -13,8 +13,6 @@
 !GEMINI.md
 !models_config.toml
 !README.md
-!変数関数仕様書.md
-!Tenchi-MCPアイデアログ.md
 
 # Whitelist source code
 !src/**
