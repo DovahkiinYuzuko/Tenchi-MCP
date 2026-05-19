@@ -2,36 +2,48 @@
 ollama_url = "http://localhost:11434"
 default_timeout = 300
 
-# 汎用アシスタント：バランス重視 (Llama 4)
+# 汎用アシスタント：2026年最新フラッグシップ (Llama 5)
 [[models]]
-name = "llama4-scout:17b"
+name = "llama5:8b"
 role = "Generalist"
-description = "High-performance general assistant for daily tasks and reasoning."
+description = "Meta's latest model (Released April 2026). High-performance general assistant with massive context."
 priority = 1
 system_prompt = "You are a helpful and efficient assistant. Provide balanced and thoughtful responses."
 
 [models.options]
 temperature = 0.7
-num_ctx = 8192
+num_ctx = 32768
 
-# コーディング特化：最強の補完・実装能力 (Qwen 3.5/3.6)
+# コーディング特化：圧倒的な実装能力 (Qwen 3.6 Coder)
 [[models]]
 name = "qwen3.6-coder:27b"
 role = "Coder"
-description = "Specialized in software engineering, providing accurate code and logic."
+description = "Current gold standard for local coding assistants. Exceptional SWE-bench performance."
 priority = 2
 system_prompt = "You are an expert software engineer. Focus on clean, efficient, and well-documented code."
 
 [models.options]
 temperature = 0.2
+num_ctx = 32768
+
+# 高密度知能モデル：軽量かつ極めて賢い (Gemma 4)
+[[models]]
+name = "gemma4:27b"
+role = "Expert"
+description = "Google's latest high-density model. Exceptional reasoning for its size."
+priority = 3
+system_prompt = "You are a highly intelligent and precise assistant. Provide detailed and accurate information."
+
+[models.options]
+temperature = 0.4
 num_ctx = 16384
 
-# 軽量・高速：簡単なタスクや低スペック環境用 (Gemma 4 / Llama 3.2)
+# 超軽量・高速：低スペック・モバイル環境用 (Gemma 4 Lite)
 [[models]]
-name = "gemma4:9b"
+name = "gemma4:4b"
 role = "Lite"
-description = "Fast and lightweight model for simple tasks and quick checks."
-priority = 3
+description = "Fast and lightweight model for quick checks and low-resource environments."
+priority = 4
 system_prompt = "You are a concise assistant. Provide short and direct answers."
 
 [models.options]
@@ -39,12 +51,12 @@ temperature = 0.5
 num_ctx = 4096
 low_vram = true
 
-# 推論特化：複雑な数学や論理パズル用 (DeepSeek-R2)
+# 推論特化：深い思考と論理分析 (Mistral Small 4)
 [[models]]
-name = "deepseek-r2:latest"
+name = "mistral-small-4:latest"
 role = "Thinker"
-description = "Advanced reasoning model for complex logic, math, and deep analysis."
-priority = 4
+description = "Efficient reasoning model specialized in logic, mathematics, and complex analysis."
+priority = 5
 system_prompt = "You are a deep-thinking logical analyzer. Think step-by-step to solve complex problems."
 
 [models.options]
