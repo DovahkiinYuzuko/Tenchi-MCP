@@ -6,6 +6,7 @@
 
 # Whitelist ONLY essential files for build and distribution
 !.gitignore
+!LICENSE
 !Cargo.toml
 !Cargo.lock
 !gemini-extension.json
