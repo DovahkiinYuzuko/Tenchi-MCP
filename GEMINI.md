@@ -52,3 +52,27 @@ You must decide whether to process a task yourself (Cloud) or delegate it to Ten
 
 ---
 Note: This document provides exhaustive guidance for AI agents and must not be truncated or compressed in future summaries.
+
+
+---
+
+## Gemini CLI Integration Protocol
+
+To ensure reliable operation within Gemini-CLI, the following constraints MUST be followed:
+
+### 1. Tool Naming
+Gemini-CLI automatically prefixes MCP tools. You MUST invoke the tools using their fully qualified names:
+- mcp_tenchi_list_local_models
+- mcp_tenchi_local_generate
+
+### 2. Execution Constraints (Crucial)
+- **Wait for Previous**: You MUST set wait_for_previous: true for all calls to mcp_tenchi_* tools. This prevents parallel execution collisions and ensure stability.
+
+### 3. Workflow
+1. **Discovery**: Call mcp_tenchi_list_local_models first to identify available models and their roles.
+2. **Evaluation**: Compare the user's request with the ole and description of each local model.
+3. **Delegation**: If a task is suitable for local inference (e.g., boilerplate code, simple refactoring, syntax checks), use mcp_tenchi_local_generate.
+4. **Integration**: Combine the local model's output into your final response to the user.
+
+### 4. Error Handling
+If a local model is unavailable or a call fails, inform the user about the specific issue (e.g., "Model not installed" or "Ollama not running") and offer to process the task using the Cloud LLM.

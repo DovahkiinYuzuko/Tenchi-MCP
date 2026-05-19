@@ -100,8 +100,11 @@ impl ServerHandler for TenchiHandler {
 
 #[tokio::main]
 async fn main() -> SdkResult<()> {
-    let config = Config::from_file("models_config.toml").map_err(|e| {
-        eprintln!(">>> Tenchi-MCP: CRITICAL ERROR - Failed to load config: {}", e);
+    let exe_path = std::env::current_exe().unwrap_or_else(|_| std::path::PathBuf::from("."));
+    let config_path = exe_path.parent().unwrap_or(std::path::Path::new(".")).join("models_config.toml");
+
+    let config = Config::from_file(&config_path).map_err(|e| {
+        eprintln!(">>> Tenchi-MCP: CRITICAL ERROR - Failed to load config at {:?}: {}", config_path, e);
         std::process::exit(1);
     }).unwrap();
 

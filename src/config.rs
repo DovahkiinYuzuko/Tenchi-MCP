@@ -49,7 +49,7 @@ pub struct ModelRuntime {
 }
 
 impl Config {
-    pub fn from_file(path: &str) -> anyhow::Result<Self> {
+    pub fn from_file<P: AsRef<std::path::Path>>(path: P) -> anyhow::Result<Self> {
         let content = std::fs::read_to_string(path)?;
         let config: Config = toml::from_str(&content)?;
         Ok(config)
