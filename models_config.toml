@@ -1,12 +1,16 @@
 [global]
+# Ollama APIのベースURL / Base URL for Ollama API
 ollama_url = "http://localhost:11434"
+# デフォルトのタイムアウト（秒） / Default timeout in seconds
 default_timeout = 300
 
-# コーディング特化：圧倒的な実装・デバッグ能力 (Qwen 3.6 Coder)
+# コーディング・ロジック実装用 / Specialized for coding and logic implementation
+# Qwen 3.6 Coder 27B: 高い実装能力とデバッグ性能を特長とするモデル
+# High implementation and debugging performance.
 [[models]]
 name = "qwen3.6-coder:27b"
 role = "Coder"
-description = "Current gold standard for local coding assistants. Exceptional SWE-bench performance and logic."
+description = "Specialized in software engineering. High performance in SWE-bench and logical reasoning."
 priority = 1
 system_prompt = "You are an expert software engineer. Focus on clean, efficient, and well-documented code. Provide accurate implementation and rigorous logic."
 
@@ -19,13 +23,15 @@ num_ctx = 32768
 num_predict = -1
 seed = 42
 
-# 高密度知能モデル：汎用・分析・高度な推論 (Gemma 4)
+# 高度な推論・汎用アシスタント / Advanced reasoning and general assistant
+# Gemma 4 31B: 高密度の知能を持ち、複雑な分析や長文読解に適したモデル
+# High-density intelligence, suitable for complex analysis and long-context comprehension.
 [[models]]
-name = "gemma4:27b"
+name = "gemma4:31b"
 role = "Expert"
-description = "Google's latest high-density model. Exceptional reasoning, analysis, and general intelligence for its size."
+description = "Google's high-density model. Strong reasoning and general intelligence."
 priority = 2
-system_prompt = "You are a highly intelligent and precise assistant. Provide detailed, accurate, and well-reasoned information across a wide range of topics."
+system_prompt = "You are a highly intelligent and precise assistant. Provide detailed, accurate, and well-reasoned information."
 
 [models.options]
 temperature = 0.7
@@ -35,11 +41,13 @@ repeat_penalty = 1.0
 num_ctx = 32768
 num_predict = 4096
 
-# 超軽量・高速：クイックチェック・低リソース環境 (Gemma 4 Lite)
+# エッジ・軽量環境用 / For edge and lightweight environments
+# Gemma 4 E4B: Effective Parameters (PLE) 技術により、リソース制限下でも効率的に動作するモデル
+# Efficient performance under resource constraints using Effective Parameters (PLE) technology.
 [[models]]
-name = "gemma4:4b"
+name = "gemma4:e4b"
 role = "Lite"
-description = "Fast and lightweight model for simple tasks, quick checks, and low-resource environments."
+description = "Fast and efficient model for simple tasks and low-resource environments."
 priority = 3
 system_prompt = "You are a concise and efficient assistant. Provide short, direct, and accurate answers."
 
