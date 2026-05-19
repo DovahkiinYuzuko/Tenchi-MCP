@@ -158,6 +158,14 @@ It enables a secure and efficient development environment by delegating simple t
 - **Flexible Configuration**: Fine-grained control over roles, priorities, system prompts, and parameters for each model via `models_config.toml`.
 - **Inference Monitoring**: Real-time display of elapsed time and status for local inferences.
 
+### Prerequisites
+
+To use this tool, you must have **Ollama** installed on your local machine.
+
+- **Ollama Official Website**: [https://ollama.com/](https://ollama.com/)
+
+After installation, please ensure you have pulled the models you plan to use (e.g., via `ollama run <model_name>`) before starting the MCP server.
+
 ### Installation
 
 Choose the appropriate installation method for your client.
