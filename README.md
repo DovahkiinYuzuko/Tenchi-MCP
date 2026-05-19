@@ -35,12 +35,12 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 お使いのクライアントに合わせて、以下の手順でインストールしてください。
 
 #### 1. Gemini CLI ユーザー
-Gemini CLIを使用している場合、拡張機能としてインストールすることで自動ビルドが利用可能です。
+Gemini CLIを使用している場合、拡張機能としてインストールすることで自動ビルドが利用可能です。確実なインストールのために、以下のようにバージョンを指定して実行することを推奨します。
 
 ```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref main
+gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.1
 ```
-※インストール時にRustのビルドが自動的に実行されます。
+※インストール時にRustのビルドが自動的に実行されます。最新のソースコードからインストールしたい場合は `--ref main` を使用してください。
 
 #### 2. Claude Code ユーザー
 1. リポジトリをクローンしてビルドします。
@@ -202,12 +202,12 @@ After installation, please ensure you have pulled the models you plan to use (e.
 Choose the appropriate installation method for your client.
 
 #### 1. Gemini CLI Users
-When using Gemini CLI, you can take advantage of automatic building by installing it as an extension.
+When using Gemini CLI, you can take advantage of automatic building by installing it as an extension. For a reliable installation, it is recommended to specify the version as follows:
 
 ```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref main
+gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.1
 ```
-*The Rust project will be built automatically upon installation.*
+*The Rust project will be built automatically upon installation. If you want to install from the latest source code, use `--ref main`.*
 
 #### 2. Claude Code Users
 1. Clone the repository and build it.
