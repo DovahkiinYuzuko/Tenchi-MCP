@@ -38,7 +38,7 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 Gemini CLIを使用している場合、拡張機能としてインストールすることで自動ビルドが利用可能です。
 
 ```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP
+gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref main
 ```
 ※インストール時にRustのビルドが自動的に実行されます。
 
@@ -205,7 +205,7 @@ Choose the appropriate installation method for your client.
 When using Gemini CLI, you can take advantage of automatic building by installing it as an extension.
 
 ```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP
+gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref main
 ```
 *The Rust project will be built automatically upon installation.*
 
