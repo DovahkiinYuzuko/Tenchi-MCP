@@ -6,49 +6,54 @@
 
 ## 日本語
 
-Tenchi-MCP（天地-MCP）は、クラウド上の強力なLLM（GeminiやClaudeなど）と、ローカル環境で動作するLLM（Ollama経由）を連携させるためのハイブリッド推論オーケストレーターです。
+Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（GeminiやClaudeなど）と、ローカル環境で動作するLLM（Ollama経由）を連携させるためのハイブリッド推論オーケストレーターです。
 
-単純なタスクや機密性の高い処理をローカルモデルに委譲することで、クラウドのトークン消費を抑えつつ、セキュアで効率的な開発環境を実現します。
+単純なタスクや機密性の高いデータの処理をローカルモデルに委譲することで、クラウドのトークン消費を抑えつつ、セキュアで効率的な開発環境を実現します。
 
-### 🚀 特徴
+### 主な機能
 
-- **ハイブリッド推論**: タスクの内容に応じて、クラウドモデルからローカルモデルへ処理を自動的に委譲。
-- **自動ビルド対応**: Gemini CLIの拡張機能としてインストールする場合、ビルドからバイナリの配置まで全自動で完了。
-- **柔軟な設定**: `models_config.toml` でモデルごとの役割、優先度、システムプロンプト、各種パラメータを詳細に設定可能。
-- **リアルタイム監視**: ローカル推論の経過時間やステータスをリアルタイムで表示。
+- **ハイブリッド推論**: タスクの性質に応じて、クラウドモデルからローカルモデルへ処理を自動的に委譲。
+- **クロスプラットフォーム対応**: Windows、macOS、Linuxのすべてで動作確認済み。
+- **柔軟な設定**: `models_config.toml` により、モデルごとの役割、優先度、システムプロンプト、各種パラメータを詳細に設定可能。
+- **推論モニタリング**: ローカル推論の経過時間やステータスをリアルタイムで表示。
 
-### 📦 インストール方法
+### インストール方法
 
 お使いのクライアントに合わせて、以下の手順でインストールしてください。
 
-#### 1. Gemini CLI ユーザー（推奨・最も簡単）
-Gemini CLIを使用している場合、コマンド一発でインストールからビルドまで完了します。
+#### 1. Gemini CLI ユーザー
+Gemini CLIを使用している場合、拡張機能としてインストールすることで自動ビルドが利用可能です。
 
-```powershell
+```bash
 gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP
 ```
-※インストール時に自動的に Rust のビルドが走り、`bin` フォルダにバイナリが生成されます。
+※インストール時にRustのビルドが自動的に実行されます。
 
 #### 2. Claude Code ユーザー
 1. リポジトリをクローンしてビルドします。
-   ```powershell
+   ```bash
    git clone https://github.com/DovahkiinYuzuko/Tenchi-MCP
    cd Tenchi-MCP
    cargo build --release
-   New-Item -ItemType Directory -Force bin
-   Copy-Item target/release/tenchi-mcp.exe bin/tenchi-mcp.exe
    ```
 2. MCPサーバーを追加します。
-   ```powershell
-   claude mcp add tenchi-mcp -- ./bin/tenchi-mcp.exe
+   ```bash
+   # Windowsの場合
+   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp.exe
+   
+   # macOS / Linux の場合
+   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp
    ```
 
-#### 3. Codex CLI (Copilot) ユーザー
+#### 3. Codex CLI (OpenAI) ユーザー
+Codex CLIは、OpenAIが提供する自律型ソフトウェアエンジニアリングエージェントプラットフォームです。
+
 1. クローンしてビルドします（上記「Claude Code」の手順 1 と同じ）。
-2. MCPサーバーを追加します。
-   ```powershell
-   codex mcp add tenchi-mcp --command ./bin/tenchi-mcp.exe
+2. `~/.codex/config.toml` にサーバーを追加します。
+   ```bash
+   codex mcp add tenchi-mcp --command ./target/release/tenchi-mcp
    ```
+   ※Windowsの場合は拡張子 `.exe` を含めてください。
 
 #### 4. Claude Desktop ユーザー
 1. クローンしてビルドします（上記「Claude Code」の手順 1 と同じ）。
@@ -57,16 +62,16 @@ gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP
    {
      "mcpServers": {
        "tenchi-mcp": {
-         "command": "C:\\絶対パス\\Tenchi-MCP\\bin\\tenchi-mcp.exe"
+         "command": "/path/to/Tenchi-MCP/target/release/tenchi-mcp"
        }
      }
    }
    ```
-   ※パスは必ず **絶対パス** で指定してください。
+   ※パスは必ず **絶対パス** で指定し、OSに合わせて実行ファイルの拡張子（`.exe` 等）を適切に設定してください。
 
-### ⚙️ 設定方法 (`models_config.toml`)
+### 設定方法 (`models_config.toml`)
 
-`models_config.toml` を編集することで、使用するローカルモデルを管理できます。
+`models_config.toml` で使用するローカルモデルを詳細に制御できます。
 
 ```toml
 [global]
@@ -77,15 +82,15 @@ default_timeout = 60                   # タイムアウト（秒）
 name = "llama3:8b"           # Ollamaでのモデル名
 role = "Generalist"           # モデルの役割
 description = "一般的なタスク向け" # エージェントが判断するための説明
-priority = 1                  # 表示優先度（昇順）
-system_prompt = "あなたは有能なアシスタントです。" # 専用のシステムプロンプト
+priority = 1                  # 表示優先度
+system_prompt = "あなたは有能なアシスタントです。" # システムプロンプト
 
 [models.options]
-temperature = 0.7             # 創造性の調整
+temperature = 0.7             # 生成の多様性
 num_ctx = 4096                # コンテキストサイズ
 ```
 
-### 🛠️ 利用可能なツール
+### 利用可能なツール
 
 - `list_local_models`: 利用可能なローカルモデルの一覧と、それぞれの役割・説明を取得します。
 - `local_generate`: 指定したローカルモデルに対して推論をリクエストします。
@@ -94,49 +99,54 @@ num_ctx = 4096                # コンテキストサイズ
 
 ## English
 
-Tenchi-MCP is a hybrid inference orchestrator designed to bridge powerful cloud-based LLMs (e.g., Gemini, Claude) with local LLM instances (via Ollama).
+Tenchi-MCP is a hybrid inference orchestrator that bridges powerful cloud-based LLMs (e.g., Gemini, Claude) with local LLM instances running via Ollama.
 
-By delegating simple tasks or sensitive data processing to local models, it enables a secure and efficient development environment while reducing cloud token consumption.
+It enables a secure and efficient development environment by delegating simple tasks or sensitive data processing to local models, thereby reducing cloud token consumption.
 
-### 🚀 Features
+### Features
 
-- **Hybrid Inference**: Automatically delegate tasks from cloud models to local models based on requirements.
-- **Automatic Build Support**: Full automation from building to binary placement when installed as a Gemini CLI extension.
-- **Flexible Configuration**: Fine-grained control over roles, priorities, system prompts, and parameters per model via `models_config.toml`.
-- **Real-time Monitoring**: Real-time display of elapsed time and status for local inferences.
+- **Hybrid Inference**: Automatically delegate tasks from cloud models to local models based on task requirements.
+- **Cross-Platform**: Fully supported on Windows, macOS, and Linux.
+- **Flexible Configuration**: Fine-grained control over roles, priorities, system prompts, and parameters for each model via `models_config.toml`.
+- **Inference Monitoring**: Real-time display of elapsed time and status for local inferences.
 
-### 📦 Installation
+### Installation
 
-Choose the installation method based on your client.
+Choose the appropriate installation method for your client.
 
-#### 1. Gemini CLI Users (Recommended / Easiest)
-If you are using Gemini CLI, installation and building are completed with a single command.
+#### 1. Gemini CLI Users
+When using Gemini CLI, you can take advantage of automatic building by installing it as an extension.
 
-```powershell
+```bash
 gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP
 ```
-*The Rust project will be built automatically upon installation, and the binary will be generated in the `bin` folder.*
+*The Rust project will be built automatically upon installation.*
 
 #### 2. Claude Code Users
 1. Clone the repository and build it.
-   ```powershell
+   ```bash
    git clone https://github.com/DovahkiinYuzuko/Tenchi-MCP
    cd Tenchi-MCP
    cargo build --release
-   New-Item -ItemType Directory -Force bin
-   Copy-Item target/release/tenchi-mcp.exe bin/tenchi-mcp.exe
    ```
 2. Add the MCP server.
-   ```powershell
-   claude mcp add tenchi-mcp -- ./bin/tenchi-mcp.exe
+   ```bash
+   # On Windows
+   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp.exe
+   
+   # On macOS / Linux
+   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp
    ```
 
-#### 3. Codex CLI (Copilot) Users
+#### 3. Codex CLI (OpenAI) Users
+Codex CLI is an autonomous software engineering agent platform provided by OpenAI.
+
 1. Clone and build (same as step 1 for "Claude Code").
-2. Add the MCP server.
-   ```powershell
-   codex mcp add tenchi-mcp --command ./bin/tenchi-mcp.exe
+2. Add the server to `~/.codex/config.toml`.
+   ```bash
+   codex mcp add tenchi-mcp --command ./target/release/tenchi-mcp
    ```
+   *Note: Include the `.exe` extension on Windows.*
 
 #### 4. Claude Desktop Users
 1. Clone and build (same as step 1 for "Claude Code").
@@ -145,14 +155,14 @@ gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP
    {
      "mcpServers": {
        "tenchi-mcp": {
-         "command": "C:\\Absolute\\Path\\Tenchi-MCP\\bin\\tenchi-mcp.exe"
+         "command": "/path/to/Tenchi-MCP/target/release/tenchi-mcp"
        }
      }
    }
    ```
-   *Note: Ensure you use the **absolute path** for the command.*
+   *Note: Ensure you use an **absolute path** and include the appropriate file extension for your OS.*
 
-### ⚙️ Configuration (`models_config.toml`)
+### Configuration (`models_config.toml`)
 
 Manage your local models by editing `models_config.toml`.
 
@@ -164,16 +174,16 @@ default_timeout = 60                   # Timeout in seconds
 [[models]]
 name = "llama3:8b"           # Model name in Ollama
 role = "Generalist"           # Role of the model
-description = "For general tasks" # Description for the agent to decide
-priority = 1                  # Display priority (ascending)
+description = "For general tasks" # Description for the agent's decision logic
+priority = 1                  # Display priority
 system_prompt = "You are a helpful assistant." # Custom system prompt
 
 [models.options]
-temperature = 0.7             # Adjust creativity
+temperature = 0.7             # Creativity adjustment
 num_ctx = 4096                # Context size
 ```
 
-### 🛠️ Available Tools
+### Available Tools
 
 - `list_local_models`: Retrieves a list of available local models with their roles and descriptions.
 - `local_generate`: Requests inference from a specified local model.

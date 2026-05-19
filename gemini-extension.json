@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "description": "Hybrid Cloud/Local LLM Inference Orchestrator via MCP",
   "contextFileName": "GEMINI.md",
-  "build": "cargo build --release ; if (!(Test-Path bin)) { New-Item -ItemType Directory -Path bin } ; Copy-Item target/release/tenchi-mcp.exe bin/tenchi-mcp.exe",
+  "build": "cargo build --release",
   "mcpServers": {
     "tenchi": {
-      "command": "${extensionPath}${/}bin${/}tenchi-mcp.exe",
+      "command": "cargo",
+      "args": ["run", "--release", "--quiet"],
       "cwd": "${extensionPath}"
     }
   }
