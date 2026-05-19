@@ -54,6 +54,7 @@ jobs:
           bin: tenchi-mcp
           target: ${{ matrix.target }}
           archive: ${{ matrix.platform }}.tenchi-mcp
+          include: gemini-extension.json,models_config.toml,GEMINI.md,AGENTS.md,LICENSE,NOTICE.md
           token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-release:
