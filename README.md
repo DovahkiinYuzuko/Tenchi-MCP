@@ -102,6 +102,42 @@ LLMの生成挙動を制御します。
 - `num_gpu`: GPUにオフロードするレイヤー数。
 - `low_vram`: VRAM節約モードの有効化（true/false）。
 
+#### 設定例 (`models_config.toml`)
+
+```toml
+[global]
+ollama_url = "http://localhost:11434"
+default_timeout = 300
+
+# コード生成に特化したモデルの例
+[[models]]
+name = "sushi-coder-custom:latest"
+role = "Coder"
+description = "コード生成およびロジック実装用のメインモデル"
+priority = 1
+system_prompt = "あなたは熟練したソフトウェアエンジニアです。簡潔で正確なコードを提供してください。"
+
+[models.options]
+temperature = 0.2
+num_ctx = 8192
+
+# コードレビューに特化したリソース制限付きの例
+[[models]]
+name = "carstenuhlig/omnicoder-9b:latest"
+role = "Reviewer"
+description = "コードレビューや調査に特化"
+priority = 2
+system_prompt = "あなたはシニアコードレビュアーです。批判的かつ建設的なフィードバックを提供してください。"
+
+[models.options]
+temperature = 0.5
+num_ctx = 16384
+
+[models.runtime]
+num_thread = 6
+low_vram = true
+```
+
 ### 利用可能なツール
 
 - `list_local_models`: 利用可能なローカルモデルの一覧と、それぞれの役割・説明を取得します。
