@@ -4,48 +4,41 @@ ollama_url = "http://localhost:11434"
 # デフォルトのタイムアウト（秒） / Default timeout in seconds
 default_timeout = 300
 
-# コーディング・ガッツリ実装用 / Heavy-duty coding and implementation
-# sushi-coder-custom: ユズコの環境でメインのコーディングを担う最強モデル
+# コーディング・ロジック実装用 / Specialized for coding and logic implementation
 [[models]]
-name = "sushi-coder-custom:latest"
+name = "qwen3.6-coder:27b"
 role = "Coder"
-description = "Specialized in software engineering. High performance in complex logic and Rust implementation."
+description = "Specialized in software engineering. High performance in SWE-bench and logical reasoning."
 priority = 1
-system_prompt = "You are an expert software engineer. Focus on clean, efficient, and well-documented code. Provide accurate implementation and rigorous logic."
+system_prompt = "You are an expert software engineer. Provide accurate implementation and rigorous logic."
 
 [models.options]
 temperature = 0.2
 top_p = 0.95
 num_ctx = 32768
 num_predict = -1
-seed = 42
 
-# コードレビュー・破壊的変更防止用 / Code review and non-destructive refactoring
-# carstenuhlig/omnicoder-9b: 「コードを壊さない」という特徴を持つ、レビューに最適なモデル
+# 高度な推論・汎用アシスタント / Advanced reasoning and general assistant
 [[models]]
-name = "carstenuhlig/omnicoder-9b:latest"
-role = "Reviewer"
-description = "Specialized in code review and refactoring. Known for maintaining code integrity and logic consistency."
+name = "gemma4:31b"
+role = "Expert"
+description = "Google's high-density model. Strong reasoning and general intelligence."
 priority = 2
-system_prompt = "You are a meticulous code reviewer. Your primary goal is to identify bugs and suggest improvements without breaking existing functionality. Keep original logic intact unless absolutely necessary."
-
-[models.options]
-temperature = 0.3
-top_p = 0.9
-num_ctx = 32768
-num_predict = 4096
-
-# 万能アシスタント・軽量環境用 / Universal assistant and efficient processing
-# gemma4-e4b-custom-uncensored: 思考力が高く、幅広いタスクに対応できる万能モデル
-[[models]]
-name = "gemma4-e4b-custom-uncensored:latest"
-role = "Generalist"
-description = "Universal assistant with strong reasoning. Fast and efficient for various general tasks."
-priority = 3
-system_prompt = "You are a highly intelligent and precise assistant. Provide detailed, accurate, and well-reasoned information. Be concise when possible."
+system_prompt = "You are a highly intelligent and precise assistant. Provide detailed, accurate, and well-reasoned information."
 
 [models.options]
 temperature = 0.7
-top_p = 0.9
+num_ctx = 32768
+
+# エッジ・軽量環境用 / For edge and lightweight environments
+[[models]]
+name = "gemma4:e4b"
+role = "Lite"
+description = "Fast and efficient model for simple tasks and low-resource environments."
+priority = 3
+system_prompt = "You are a concise and efficient assistant. Provide short, direct, and accurate answers."
+
+[models.options]
+temperature = 0.5
 num_ctx = 8192
-num_predict = 2048
+low_vram = true
