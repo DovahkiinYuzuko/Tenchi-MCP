@@ -243,6 +243,42 @@ Controls execution resources.
 - `num_gpu`: Number of layers to offload to the GPU.
 - `low_vram`: Enable low VRAM mode (true/false).
 
+#### Configuration Example (`models_config.toml`)
+
+```toml
+[global]
+ollama_url = "http://localhost:11434"
+default_timeout = 300
+
+# Example of a model specialized for code generation
+[[models]]
+name = "sushi-coder-custom:latest"
+role = "Coder"
+description = "Main model for code generation and logic implementation"
+priority = 1
+system_prompt = "You are an expert software engineer. Provide concise and accurate code."
+
+[models.options]
+temperature = 0.2
+num_ctx = 8192
+
+# Example of a model specialized for code review with resource limits
+[[models]]
+name = "carstenuhlig/omnicoder-9b:latest"
+role = "Reviewer"
+description = "Specialized in code review and research"
+priority = 2
+system_prompt = "You are a senior code reviewer. Provide critical and constructive feedback."
+
+[models.options]
+temperature = 0.5
+num_ctx = 16384
+
+[models.runtime]
+num_thread = 6
+low_vram = true
+```
+
 ### Available Tools
 
 - `list_local_models`: Retrieves a list of available local models with their roles and descriptions.
