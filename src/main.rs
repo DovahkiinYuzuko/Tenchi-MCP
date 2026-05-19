@@ -11,6 +11,7 @@ use rust_mcp_sdk::{
 };
 use std::sync::Arc;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use crate::config::Config;
 use crate::ollama::OllamaClient;
 
@@ -56,11 +57,16 @@ impl ServerHandler for TenchiHandler {
                 let mut models = self.config.models.clone();
                 models.sort_by_key(|m| m.priority);
 
-                let models_info = models.iter().map(|m| {
-                    format!("Name: {}, Role: {}, Priority: {}, Description: {}", m.name, m.role, m.priority, m.description)
-                }).collect::<Vec<_>>().join("\n");
+                let models_json = json!(models.iter().map(|m| {
+                    json!({
+                        "name": m.name,
+                        "role": m.role,
+                        "priority": m.priority,
+                        "description": m.description
+                    })
+                }).collect::<Vec<_>>());
                 
-                Ok(CallToolResult::text_content(vec![models_info.into()]))
+                Ok(CallToolResult::text_content(vec![models_json.to_string().into()]))
             }
             "local_generate" => {
                 let args: LocalGenerateTool = serde_json::from_value(
@@ -69,7 +75,7 @@ impl ServerHandler for TenchiHandler {
 
                 let model_cfg = self.config.models.iter()
                     .find(|m| m.name == args.model_name)
-                    .ok_or_else(|| CallToolError::unknown_tool(format!("Model {} not found in config", args.model_name)))?;
+                    .ok_or_else(|| CallToolError::unknown_tool(format!("Model {} not found in config. Available models: {:?}", args.model_name, self.config.models.iter().map(|m| &m.name).collect::<Vec<_>>())))?;
 
                 match self.client.generate(
                     &model_cfg.name, 
@@ -79,7 +85,12 @@ impl ServerHandler for TenchiHandler {
                     model_cfg.runtime.clone()
                 ).await {
                     Ok(response) => Ok(CallToolResult::text_content(vec![response.into()])),
-                    Err(e) => Ok(CallToolResult::text_content(vec![format!("Error: {}", e).into()])),
+                    Err(e) => {
+                        let error_msg = format!("Ollama generation failed for model '{}': {}. Please check if Ollama is running and the model is installed.", model_cfg.name, e);
+                        let mut result = CallToolResult::text_content(vec![error_msg.into()]);
+                        result.is_error = Some(true);
+                        Ok(result)
+                    }
                 }
             }
             _ => Err(CallToolError::unknown_tool(params.name)),
