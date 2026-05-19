@@ -1,21 +1,15 @@
-# Ignore everything by default
-*
+# Build artifacts
+/target/
+/bin/
 
-# Allow directories so we can whitelist their contents
-!*/
+# IDE settings and history
+/.history/
+/.qodo/
+/.vscode/
 
-# Whitelist ONLY essential files for build and distribution
-!.gitignore
-!Cargo.toml
-!Cargo.lock
-!gemini-extension.json
-!AGENTS.md
-!GEMINI.md
-!models_config.toml
-!README.md
+# Local configuration and logs
+.env
+*.log
 
-# Whitelist source code
-!src/**
-
-# Whitelist GitHub workflows
-!.github/**
+# Project specific ignores
+/お試し/
