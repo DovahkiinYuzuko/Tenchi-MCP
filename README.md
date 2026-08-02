@@ -17,10 +17,10 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 - **柔軟な設定**: `models_config.toml` により、モデルごとの役割、優先度、システムプロンプト、各種パラメータを詳細に設定可能。
 - **推論モニタリング**: ローカル推論の経過時間やステータスをリアルタイムで表示。
 
-### パフォーマンスと制限事項
-
-- **推論速度**: ローカル環境での推論速度は、お使いのハードウェア（CPU/GPU/VRAM）に大きく依存します。クラウドモデルと比較して応答に時間がかかる場合があることをあらかじめご了承ください。
-- **動作確認**: 現在、Windows 11 環境での動作を確認しています。macOS および Linux については設計上考慮されていますが、実機での検証は未実施です。
+> [!IMPORTANT]
+> **パフォーマンスと動作確認状況**
+> - **推論速度**: ローカル環境での推論速度は、お使いのハードウェア（CPU/GPU/VRAM）に依存します。
+> - **動作確認状況**: 現在、Windows 11 環境での動作を確認しています。macOS および Linux については設計上考慮されています。
 
 ### 前提条件
 
@@ -31,11 +31,6 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 インストール後、`models_config.toml` に設定する予定のモデルをあらかじめ `ollama run <model_name>` 等でプルしておいてください。
 
 ### インストール方法
-
-お使いのクライアントに合わせて、以下の手順でインストールしてください。
-
-> [!WARNING]
-> Gemini CLIは2026年6月にサービス終了予定です。後継ツールである **Antigravity CLI** への移行を強く推奨します。
 
 #### Antigravity 2.0 / Antigravity CLI ユーザー (推奨)
 以下の1行コマンドを実行するだけで、自動的にプラグイン登録、最新ビルド済みバイナリのダウンロードおよび設定が完了します。
@@ -156,10 +151,10 @@ It enables a secure and efficient development environment by delegating simple t
 - **Flexible Configuration**: Fine-grained control over roles, priorities, system prompts, and parameters for each model via `models_config.toml`.
 - **Inference Monitoring**: Real-time display of elapsed time and status for local inferences.
 
-### Performance and Limitations
-
-- **Inference Speed**: The speed of local inference heavily depends on your hardware (CPU/GPU/VRAM). Please be aware that responses may take significantly longer compared to cloud-based models.
-- **Platform Verification**: Currently, operation has been verified in a Windows 11 environment. Support for macOS and Linux is included in the design, but has not yet been verified on actual hardware.
+> [!IMPORTANT]
+> **Performance & Platform Verification**
+> - **Inference Speed**: Local inference speed depends on your hardware (CPU/GPU/VRAM).
+> - **Platform Verification**: Operation has been verified in a Windows 11 environment. macOS and Linux support is included by design.
 
 ### Prerequisites
 
@@ -170,11 +165,6 @@ To use this tool, you must have **Ollama** installed on your local machine.
 After installation, please ensure you have pulled the models you plan to use (e.g., via `ollama run <model_name>`) before starting the MCP server.
 
 ### Installation
-
-Choose the appropriate installation method for your client.
-
-> [!WARNING]
-> Gemini CLI will be deprecated in June 2026. Transitioning to the successor, **Antigravity CLI**, is strongly recommended.
 
 #### Antigravity 2.0 / Antigravity CLI Users (Recommended)
 Run the following one-liner command in your terminal to automatically register the plugin, download the latest pre-compiled release binary, and configure absolute paths.

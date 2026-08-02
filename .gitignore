@@ -10,9 +10,7 @@
 !NOTICE.md
 !Cargo.toml
 !Cargo.lock
-!gemini-extension.json
 !AGENTS.md
-!GEMINI.md
 !models_config.toml
 !README.md
 !mcp_config.json
