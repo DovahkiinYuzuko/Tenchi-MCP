@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "tenchi": {
+      "command": "./tenchi-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}

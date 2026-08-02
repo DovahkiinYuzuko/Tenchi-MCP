@@ -15,6 +15,10 @@
 !GEMINI.md
 !models_config.toml
 !README.md
+!mcp_config.json
+!plugin.json
+!agy_install.ps1
+!agy_install.sh
 
 # Whitelist source code
 !src/**

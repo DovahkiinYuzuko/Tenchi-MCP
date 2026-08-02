@@ -38,22 +38,21 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 > Gemini CLIは2026年6月にサービス終了予定です。後継ツールである **Antigravity CLI** への移行を強く推奨します。
 
 #### 1. Antigravity 2.0 / Antigravity CLI ユーザー (推奨)
-Antigravity 2.0 または Antigravity CLI で本 MCP サーバーを利用するには、リポジトリをクローンして付属の自動インストールスクリプトを実行します。
+以下の1行コマンドを実行するだけで、自動的にクローン、ビルド、プラグイン配置および絶対パス設定が完了します。
 
-**Windows 11:**
+**Windows 11 (PowerShell):**
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\install.ps1
+irm https://raw.githubusercontent.com/DovahkiinYuzuko/Tenchi-MCP/main/agy_install.ps1 | iex
 ```
 
-**macOS / Linux:**
+**macOS / Linux (Bash):**
 ```bash
-chmod +x ./install.sh
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/DovahkiinYuzuko/Tenchi-MCP/main/agy_install.sh | bash
 ```
 
-このスクリプトにより `cargo build --release` が実行され、`~/.gemini/config/plugins/tenchi-mcp` にプラグインマニフェスト (`plugin.json`)、MCP設定 (`mcp_config.json`)、設定ファイル (`models_config.toml`)、および絶対パス指定されたバイナリが自動的に配置されます。
+このワンライナーにより、`cargo build --release` が実行され、`~/.gemini/config/plugins/tenchi-mcp` に `plugin.json` / `mcp_config.json` / `models_config.toml` / バイナリが全自動で配置されます。
 
-※ また、MCP サーバー起動時に Ollama (`ollama serve`) が未起動の場合、バックグラウンドでの自動起動を自動的に試みます。
+※ また、MCP サーバー起動時に Ollama (`ollama serve`) が未起動の場合、バックグラウンドでの自動起動を試みます。
 
 #### 1.5. Gemini CLI ユーザー (旧環境向け・非推奨)
 Gemini CLIを使用している場合、拡張機能としてインストールすることでバイナリの自動ダウンロードが利用可能です。
