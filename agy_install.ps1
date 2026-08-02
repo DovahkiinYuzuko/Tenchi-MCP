@@ -2,13 +2,18 @@
 $ErrorActionPreference = "Stop"
 
 Write-Host ">>> Installing Tenchi-MCP plugin via Antigravity CLI..." -ForegroundColor Cyan
-agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP
+try {
+    & agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP 2>$null
+} catch {
+    Write-Host ">>> Plugin installation notice: Continued setup." -ForegroundColor Yellow
+}
 
-$pluginDir = "$HOME\.gemini\antigravity-cli\plugins\tenchi-mcp"
+$pluginDir = "$HOME\.gemini\config\plugins\tenchi-mcp"
 if (!(Test-Path $pluginDir)) {
-    $pluginDir = "$HOME\.gemini\config\plugins\tenchi-mcp"
+    $pluginDir = "$HOME\.gemini\antigravity-cli\plugins\tenchi-mcp"
 }
 if (!(Test-Path $pluginDir)) {
+    $pluginDir = "$HOME\.gemini\config\plugins\tenchi-mcp"
     New-Item -ItemType Directory -Path $pluginDir -Force | Out-Null
 }
 

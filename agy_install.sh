@@ -3,11 +3,11 @@
 set -e
 
 echo ">>> Installing Tenchi-MCP plugin via Antigravity CLI..."
-agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP || true
+agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP >/dev/null 2>&1 || true
 
-PLUGIN_DIR="$HOME/.gemini/antigravity-cli/plugins/tenchi-mcp"
+PLUGIN_DIR="$HOME/.gemini/config/plugins/tenchi-mcp"
 if [ ! -d "$PLUGIN_DIR" ]; then
-    PLUGIN_DIR="$HOME/.gemini/config/plugins/tenchi-mcp"
+    PLUGIN_DIR="$HOME/.gemini/antigravity-cli/plugins/tenchi-mcp"
 fi
 mkdir -p "$PLUGIN_DIR"
 
