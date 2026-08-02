@@ -1,6 +1,6 @@
 [package]
 name = "tenchi-mcp"
-version = "0.1.9"
+version = "0.2.0"
 edition = "2021"
 authors = ["YuzukoUnderson <rikuichi0212@gmail.com>"]
 license = "MIT"
