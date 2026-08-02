@@ -1,6 +1,6 @@
 {
   "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "tenchi-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Hybrid Cloud/Local LLM Inference Orchestrator via MCP with Ollama Auto-Start"
 }
