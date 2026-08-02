@@ -123,4 +123,40 @@ impl OllamaClient {
         
         Ok(response.trim().to_string())
     }
+
+    pub async fn ensure_ollama_running(&self) -> anyhow::Result<()> {
+        if self.list_models().await.is_ok() {
+            return Ok(());
+        }
+
+        eprintln!(">>> Tenchi-MCP: Ollama not responding. Attempting to start 'ollama serve'...");
+        
+        let spawn_result = if cfg!(target_os = "windows") {
+            std::process::Command::new("cmd")
+                .args(["/C", "start /B ollama serve"])
+                .spawn()
+        } else {
+            std::process::Command::new("sh")
+                .args(["-c", "ollama serve > /dev/null 2>&1 &"])
+                .spawn()
+        };
+
+        if let Err(e) = spawn_result {
+            eprintln!(">>> Tenchi-MCP: Failed to spawn 'ollama serve' command: {}", e);
+            return Err(e.into());
+        }
+
+        for i in 1..=5 {
+            tokio::time::sleep(Duration::from_secs(1)).await;
+            if self.list_models().await.is_ok() {
+                eprintln!(">>> Tenchi-MCP: Successfully connected to Ollama after auto-start.");
+                return Ok(());
+            }
+            eprintln!(">>> Tenchi-MCP: Waiting for Ollama to start (attempt {}/5)...", i);
+        }
+
+        eprintln!(">>> Tenchi-MCP: WARNING - Ollama process spawned but did not respond within 5 seconds.");
+        Ok(())
+    }
 }
+

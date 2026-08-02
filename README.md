@@ -37,13 +37,23 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 > [!WARNING]
 > Gemini CLIは2026年6月にサービス終了予定です。後継ツールである **Antigravity CLI** への移行を強く推奨します。
 
-#### 1. Antigravity CLI ユーザー (推奨)
-Antigravity CLIを使用している場合、拡張機能としてインストールすることでバイナリの自動ダウンロードが利用可能です。確実なインストールのために、以下のようにバージョンを指定して実行することを推奨します。
+#### 1. Antigravity 2.0 / Antigravity CLI ユーザー (推奨)
+Antigravity 2.0 または Antigravity CLI で本 MCP サーバーを利用するには、リポジトリをクローンして付属の自動インストールスクリプトを実行します。
 
-```bash
-agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.9
+**Windows 11:**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
-※インストール時に各プラットフォーム向けのビルド済みバイナリと設定ファイルが自動的に展開されます。最新のソースコードからインストールして自分でビルドしたい場合は `--ref main` を使用してください。
+
+**macOS / Linux:**
+```bash
+chmod +x ./install.sh
+./install.sh
+```
+
+このスクリプトにより `cargo build --release` が実行され、`~/.gemini/config/plugins/tenchi-mcp` にプラグインマニフェスト (`plugin.json`)、MCP設定 (`mcp_config.json`)、設定ファイル (`models_config.toml`)、および絶対パス指定されたバイナリが自動的に配置されます。
+
+※ また、MCP サーバー起動時に Ollama (`ollama serve`) が未起動の場合、バックグラウンドでの自動起動を自動的に試みます。
 
 #### 1.5. Gemini CLI ユーザー (旧環境向け・非推奨)
 Gemini CLIを使用している場合、拡張機能としてインストールすることでバイナリの自動ダウンロードが利用可能です。
@@ -218,7 +228,7 @@ Choose the appropriate installation method for your client.
 When using Antigravity CLI, you can take advantage of automatic binary download by installing it as an extension. For a reliable installation, it is recommended to specify the version as follows:
 
 ```bash
-agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.9
+agy --install-extension https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.8
 ```
 *Built-in binaries and configuration files for each platform will be automatically deployed upon installation. If you want to install from the latest source code and build it yourself, use `--ref main`.*
 

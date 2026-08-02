@@ -110,8 +110,10 @@ async fn main() -> SdkResult<()> {
 
     let client = OllamaClient::new(config.global.ollama_url.clone(), config.global.default_timeout);
 
-    // Startup check: Verify if Ollama is running and models exist
+    // Startup check: Verify if Ollama is running (auto-start if needed) and check installed models
     eprintln!(">>> Tenchi-MCP: Initializing and checking Ollama connectivity...");
+    let _ = client.ensure_ollama_running().await;
+
     match client.list_models().await {
         Ok(installed_models) => {
             eprintln!(">>> Tenchi-MCP: Connected to Ollama successfully.");
