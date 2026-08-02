@@ -37,8 +37,8 @@ Tenchi-MCP（天地-MCP）は、クラウドベースの強力なLLM（Geminiや
 > [!WARNING]
 > Gemini CLIは2026年6月にサービス終了予定です。後継ツールである **Antigravity CLI** への移行を強く推奨します。
 
-#### 1. Antigravity 2.0 / Antigravity CLI ユーザー (推奨)
-以下の1行コマンドを実行するだけで、自動的にクローン、ビルド、プラグイン配置および絶対パス設定が完了します。
+#### Antigravity 2.0 / Antigravity CLI ユーザー (推奨)
+以下の1行コマンドを実行するだけで、自動的にプラグイン登録、最新ビルド済みバイナリのダウンロードおよび設定が完了します。
 
 **Windows 11 (PowerShell):**
 ```powershell
@@ -50,56 +50,9 @@ irm https://raw.githubusercontent.com/DovahkiinYuzuko/Tenchi-MCP/main/agy_instal
 curl -fsSL https://raw.githubusercontent.com/DovahkiinYuzuko/Tenchi-MCP/main/agy_install.sh | bash
 ```
 
-このワンライナーにより、`cargo build --release` が実行され、`~/.gemini/config/plugins/tenchi-mcp` に `plugin.json` / `mcp_config.json` / `models_config.toml` / バイナリが全自動で配置されます。
+このワンライナーにより、`agy plugin install` が実行され、`~/.gemini/antigravity-cli/plugins/tenchi-mcp` に最新のリリースバイナリ、`plugin.json`、`mcp_config.json`、`models_config.toml` が全自動で配置・設定されます。
 
 ※ また、MCP サーバー起動時に Ollama (`ollama serve`) が未起動の場合、バックグラウンドでの自動起動を試みます。
-
-#### 1.5. Gemini CLI ユーザー (旧環境向け・非推奨)
-Gemini CLIを使用している場合、拡張機能としてインストールすることでバイナリの自動ダウンロードが利用可能です。
-
-```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.9
-```
-
-#### 2. Claude Code ユーザー
-1. リポジトリをクローンしてビルドします。
-   ```bash
-   git clone https://github.com/DovahkiinYuzuko/Tenchi-MCP
-   cd Tenchi-MCP
-   cargo build --release
-   ```
-2. MCPサーバーを追加します。
-   ```bash
-   # Windowsの場合
-   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp.exe
-   
-   # macOS / Linux の場合
-   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp
-   ```
-
-#### 3. Codex CLI (OpenAI) ユーザー
-Codex CLIは、OpenAIが提供する自律型ソフトウェアエンジニアリングエージェントプラットフォームです。
-
-1. クローンしてビルドします（上記「Claude Code」の手順 1 と同じ）。
-2. `~/.codex/config.toml` にサーバーを追加します。
-   ```bash
-   codex mcp add tenchi-mcp --command ./target/release/tenchi-mcp
-   ```
-   ※Windowsの場合は拡張子 `.exe` を含めてください。
-
-#### 4. Claude Desktop ユーザー
-1. クローンしてビルドします（上記「Claude Code」の手順 1 と同じ）。
-2. 設定ファイル（`claude_desktop_config.json`）を編集します。
-   ```json
-   {
-     "mcpServers": {
-       "tenchi-mcp": {
-         "command": "/path/to/Tenchi-MCP/target/release/tenchi-mcp"
-       }
-     }
-   }
-   ```
-   ※パスは必ず **絶対パス** で指定し、OSに合わせて実行ファイルの拡張子（`.exe` 等）を適切に設定してください。
 
 ### 設定方法 (`models_config.toml`)
 
@@ -223,60 +176,22 @@ Choose the appropriate installation method for your client.
 > [!WARNING]
 > Gemini CLI will be deprecated in June 2026. Transitioning to the successor, **Antigravity CLI**, is strongly recommended.
 
-#### 1. Antigravity CLI Users (Recommended)
-When using Antigravity CLI, you can take advantage of automatic binary download by installing it as an extension. For a reliable installation, it is recommended to specify the version as follows:
+#### Antigravity 2.0 / Antigravity CLI Users (Recommended)
+Run the following one-liner command in your terminal to automatically register the plugin, download the latest pre-compiled release binary, and configure absolute paths.
 
-```bash
-agy --install-extension https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.8
-```
-*Built-in binaries and configuration files for each platform will be automatically deployed upon installation. If you want to install from the latest source code and build it yourself, use `--ref main`.*
-
-#### 1.5. Gemini CLI Users (Legacy/Deprecated)
-When using Gemini CLI, you can take advantage of automatic binary download by installing it as an extension.
-
-```bash
-gemini extensions install https://github.com/DovahkiinYuzuko/Tenchi-MCP --ref v0.1.9
+**Windows 11 (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/DovahkiinYuzuko/Tenchi-MCP/main/agy_install.ps1 | iex
 ```
 
-#### 2. Claude Code Users
-1. Clone the repository and build it.
-   ```bash
-   git clone https://github.com/DovahkiinYuzuko/Tenchi-MCP
-   cd Tenchi-MCP
-   cargo build --release
-   ```
-2. Add the MCP server.
-   ```bash
-   # On Windows
-   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp.exe
-   
-   # On macOS / Linux
-   claude mcp add tenchi-mcp -- ./target/release/tenchi-mcp
-   ```
+**macOS / Linux (Bash):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/DovahkiinYuzuko/Tenchi-MCP/main/agy_install.sh | bash
+```
 
-#### 3. Codex CLI (OpenAI) Users
-Codex CLI is an autonomous software engineering agent platform provided by OpenAI.
+This one-liner executes `agy plugin install` and deploys the latest release binary along with `plugin.json`, `mcp_config.json`, and `models_config.toml` to `~/.gemini/antigravity-cli/plugins/tenchi-mcp`.
 
-1. Clone and build (same as step 1 for "Claude Code").
-2. Add the server using the `codex mcp add` command.
-   ```bash
-   codex mcp add tenchi-mcp --command ./target/release/tenchi-mcp
-   ```
-   *Note: Include the `.exe` extension on Windows.*
-
-#### 4. Claude Desktop Users
-1. Clone and build (same as step 1 for "Claude Code").
-2. Edit the configuration file (`claude_desktop_config.json`).
-   ```json
-   {
-     "mcpServers": {
-       "tenchi-mcp": {
-         "command": "/path/to/Tenchi-MCP/target/release/tenchi-mcp"
-       }
-     }
-   }
-   ```
-   *Note: Ensure you use an **absolute path** and include the appropriate file extension for your OS.*
+*Note: If `ollama serve` is not running when the MCP server starts, it will automatically attempt to launch Ollama in the background.*
 
 ### Configuration (`models_config.toml`)
 

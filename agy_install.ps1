@@ -1,31 +1,41 @@
 # One-liner Installer for Tenchi-MCP on Windows
 $ErrorActionPreference = "Stop"
 
-Write-Host ">>> Installing Tenchi-MCP for Antigravity 2.0 / CLI..." -ForegroundColor Cyan
+Write-Host ">>> Installing Tenchi-MCP plugin via Antigravity CLI..." -ForegroundColor Cyan
+agy plugin install https://github.com/DovahkiinYuzuko/Tenchi-MCP
 
-$tempDir = Join-Path $env:TEMP "tenchi-mcp-install"
-if (Test-Path $tempDir) {
-    Remove-Item -Recurse -Force $tempDir
+$pluginDir = "$HOME\.gemini\antigravity-cli\plugins\tenchi-mcp"
+if (!(Test-Path $pluginDir)) {
+    $pluginDir = "$HOME\.gemini\config\plugins\tenchi-mcp"
 }
-
-Write-Host ">>> Cloning repository..." -ForegroundColor Cyan
-git clone https://github.com/DovahkiinYuzuko/Tenchi-MCP.git $tempDir
-
-Set-Location $tempDir
-Write-Host ">>> Building release binary..." -ForegroundColor Cyan
-cargo build --release
-
-$pluginDir = "$HOME\.gemini\config\plugins\tenchi-mcp"
 if (!(Test-Path $pluginDir)) {
     New-Item -ItemType Directory -Path $pluginDir -Force | Out-Null
 }
 
+Write-Host ">>> Downloading latest pre-compiled binary from GitHub Releases..." -ForegroundColor Cyan
+try {
+    $releaseUrl = "https://api.github.com/repos/DovahkiinYuzuko/Tenchi-MCP/releases/latest"
+    $latestRelease = Invoke-RestMethod -Uri $releaseUrl
+    $winAsset = $latestRelease.assets | Where-Object { $_.name -like "*win32*" -or $_.name -like "*windows*" }
+
+    if ($winAsset) {
+        $zipPath = Join-Path $pluginDir "binary.zip"
+        Invoke-WebRequest -Uri $winAsset.browser_download_url -OutFile $zipPath
+        Expand-Archive -Path $zipPath -DestinationPath $pluginDir -Force
+        Remove-Item $zipPath -Force
+    } else {
+        Write-Host ">>> Release binary asset not found. Building locally..." -ForegroundColor Yellow
+        cargo build --release
+        Copy-Item "target\release\tenchi-mcp.exe" "$pluginDir\tenchi-mcp.exe" -Force
+    }
+} catch {
+    Write-Host ">>> Error fetching release binary ($_.Exception.Message). Building locally..." -ForegroundColor Yellow
+    cargo build --release
+    Copy-Item "target\release\tenchi-mcp.exe" "$pluginDir\tenchi-mcp.exe" -Force
+}
+
 $binPath = Join-Path $pluginDir "tenchi-mcp.exe"
 $binEscaped = $binPath.Replace("\", "\\")
-
-Copy-Item "target\release\tenchi-mcp.exe" "$pluginDir\tenchi-mcp.exe" -Force
-Copy-Item "models_config.toml" "$pluginDir\models_config.toml" -Force
-Copy-Item "plugin.json" "$pluginDir\plugin.json" -Force
 
 $mcpConfigJson = @"
 {
@@ -42,4 +52,4 @@ $mcpConfigJson = @"
 Set-Content -Path "$pluginDir\mcp_config.json" -Value $mcpConfigJson -Encoding UTF8
 
 Write-Host ">>> Tenchi-MCP successfully installed to $pluginDir" -ForegroundColor Green
-Write-Host ">>> Absolute binary path resolved: $binPath" -ForegroundColor Green
+Write-Host ">>> Absolute binary path set: $binPath" -ForegroundColor Green
